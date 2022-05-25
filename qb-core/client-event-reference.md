@@ -1,0 +1,331 @@
+---
+description: Learn about and how to use common core client events!
+---
+
+# 🎮 Client Event Reference
+
+### QBCore:Client:OnPlayerLoaded
+
+* Handles the player loading in after character selection
+
+```lua
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+    ShutdownLoadingScreenNui()
+    LocalPlayer.state:set('isLoggedIn', true, false)
+    if not QBConfig.Server.PVP then return end
+    SetCanAttackFriendly(PlayerPedId(), true, false)
+    NetworkSetFriendlyFireOption(true)
+end)
+```
+
+### QBCore:Client:OnPlayerUnload
+
+* Handles the player login out to character selection
+
+```lua
+RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+    LocalPlayer.state:set('isLoggedIn', false, false)
+end)
+```
+
+### QBCore:Command:TeleportToPlayer
+
+* Event used for the /tp id command
+
+```lua
+RegisterNetEvent('QBCore:Command:TeleportToPlayer', function(coords)
+    local ped = PlayerPedId()
+    SetPedCoordsKeepVehicle(ped, coords.x, coords.y, coords.z)
+end)
+```
+
+### QBCore:Client:PvpHasToggled
+
+* Event that handles the `QBConfig.Server.PVP` option
+
+```lua
+RegisterNetEvent('QBCore:Client:PvpHasToggled', function(pvp_state)
+    SetCanAttackFriendly(PlayerPedId(), pvp_state, false)
+    NetworkSetFriendlyFireOption(pvp_state)
+end)
+```
+
+### QBCore:Command:TeleportToPlayer
+
+* Event used when you teleport to a player using qb-adminmenu
+
+```lua
+RegisterNetEvent('QBCore:Command:TeleportToPlayer', function(coords)
+    local ped = PlayerPedId()
+    SetPedCoordsKeepVehicle(ped, coords.x, coords.y, coords.z)
+end)
+```
+
+### QBCore:Command:TeleportToCoords
+
+* Event used for the /tp x y z command
+
+```lua
+RegisterNetEvent('QBCore:Command:TeleportToCoords', function(x, y, z)
+    local ped = PlayerPedId()
+    SetPedCoordsKeepVehicle(ped, x, y, z)
+end)
+```
+
+### QBCore:Command:GoToMarker
+
+* Event used for the /tpm command
+
+```lua
+RegisterNetEvent('QBCore:Command:GoToMarker', function()
+    local PlayerPedId = PlayerPedId
+    local GetEntityCoords = GetEntityCoords
+    local GetGroundZFor_3dCoord = GetGroundZFor_3dCoord
+
+    local blipMarker <const> = GetFirstBlipInfoId(8)
+    if not DoesBlipExist(blipMarker) then
+        QBCore.Functions.Notify('No Waypoint Set.', "error",5000)
+        return 'marker'
+    end
+
+    -- Fade screen to hide how clients get teleported.
+    DoScreenFadeOut(650)
+    while not IsScreenFadedOut() do
+        Wait(0)
+    end
+
+    local ped, coords <const> = PlayerPedId(), GetBlipInfoIdCoord(blipMarker)
+    local vehicle = GetVehiclePedIsIn(ped, false)
+    local oldCoords <const> = GetEntityCoords(ped)
+
+    -- Unpack coords instead of having to unpack them while iterating.
+    -- 825.0 seems to be the max a player can reach while 0.0 being the lowest.
+    local x, y, groundZ, Z_START = coords['x'], coords['y'], 850.0, 950.0
+    local found = false
+    if vehicle > 0 then
+        FreezeEntityPosition(vehicle, true)
+    else
+        FreezeEntityPosition(ped, true)
+    end
+
+    for i = Z_START, 0, -25.0 do
+        local z = i
+        if (i % 2) ~= 0 then
+            z = Z_START - i
+        end
+
+        NewLoadSceneStart(x, y, z, x, y, z, 50.0, 0)
+        local curTime = GetGameTimer()
+        while IsNetworkLoadingScene() do
+            if GetGameTimer() - curTime > 1000 then
+                break
+            end
+            Wait(0)
+        end
+        NewLoadSceneStop()
+        SetPedCoordsKeepVehicle(ped, x, y, z)
+
+        while not HasCollisionLoadedAroundEntity(ped) do
+            RequestCollisionAtCoord(x, y, z)
+            if GetGameTimer() - curTime > 1000 then
+                break
+            end
+            Wait(0)
+        end
+
+        -- Get ground coord. As mentioned in the natives, this only works if the client is in render distance.
+        found, groundZ = GetGroundZFor_3dCoord(x, y, z, false);
+        if found then
+            Wait(0)
+            SetPedCoordsKeepVehicle(ped, x, y, groundZ)
+            break
+        end
+        Wait(0)
+    end
+
+    -- Remove black screen once the loop has ended.
+    DoScreenFadeIn(650)
+    if vehicle > 0 then
+        FreezeEntityPosition(vehicle, false)
+    else
+        FreezeEntityPosition(ped, false)
+    end
+
+    if not found then
+        -- If we can't find the coords, set the coords to the old ones.
+        -- We don't unpack them before since they aren't in a loop and only called once.
+        SetPedCoordsKeepVehicle(ped, oldCoords['x'], oldCoords['y'], oldCoords['z'] - 1.0)
+        QBCore.Functions.Notify('Error While Teleporting.', "error",5000)
+    end
+
+    -- If Z coord was found, set coords in found coords.
+    SetPedCoordsKeepVehicle(ped, x, y, groundZ)
+    QBCore.Functions.Notify('Teleported To Waypoint.', "success",5000)
+end)
+```
+
+### QBCore:Command:SpawnVehicle
+
+* Event for client-side vehicle spawning
+
+```lua
+RegisterNetEvent('QBCore:Command:SpawnVehicle', function(vehName)
+    local ped = PlayerPedId()
+    local hash = GetHashKey(vehName)
+    local veh = GetVehiclePedIsUsing(ped)
+    if not IsModelInCdimage(hash) then return end
+    RequestModel(hash)
+    while not HasModelLoaded(hash) do
+        Wait(0)
+    end
+        
+     if IsPedInAnyVehicle(ped) then 
+        DeleteVehicle(veh)
+    end
+        
+    local vehicle = CreateVehicle(hash, GetEntityCoords(ped), GetEntityHeading(ped), true, false)
+    TaskWarpPedIntoVehicle(ped, vehicle, -1)
+    SetVehicleFuelLevel(vehicle, 100.0)
+    SetModelAsNoLongerNeeded(hash)
+    TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(vehicle))
+end)
+```
+
+### QBCore:Command:DeleteVehicle
+
+* Event for client-side vehicle deletion
+
+```lua
+RegisterNetEvent('QBCore:Command:DeleteVehicle', function()
+    local ped = PlayerPedId()
+    local veh = GetVehiclePedIsUsing(ped)
+    if veh ~= 0 then
+        SetEntityAsMissionEntity(veh, true, true)
+        DeleteVehicle(veh)
+    else
+        local pcoords = GetEntityCoords(ped)
+        local vehicles = GetGamePool('CVehicle')
+        for key, value in pairs(vehicles) do
+            if #(pcoords - GetEntityCoords(value)) <= 5.0 then
+                SetEntityAsMissionEntity(value, true, true)
+                DeleteVehicle(value)
+            end
+        end
+    end
+end)
+```
+
+### QBCore:Player:SetPlayerData
+
+* Event for assigning player data on character creation
+
+```lua
+RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
+    QBCore.PlayerData = val
+end)
+```
+
+### QBCore:Player:UpdatePlayerData
+
+* Event for updating the player on logout/disconnect
+
+```lua
+RegisterNetEvent('QBCore:Player:UpdatePlayerData', function()
+    TriggerServerEvent('QBCore:UpdatePlayer')
+end)
+```
+
+### QBCore:Notify
+
+* Event for handling the core notification system when called from server
+
+```lua
+RegisterNetEvent('QBCore:Notify', function(text, type, length)
+    QBCore.Functions.Notify(text, type, length)
+end)
+```
+
+### QBCore:Client:TriggerCallback
+
+* Event for triggering a callback
+
+```lua
+RegisterNetEvent('QBCore:Client:TriggerCallback', function(name, ...)
+    if QBCore.ServerCallbacks[name] then
+        QBCore.ServerCallbacks[name](...)
+        QBCore.ServerCallbacks[name] = nil
+    end
+end)
+```
+
+### QBCore:Client:UseItem
+
+* Event for using an item when called from server
+
+```lua
+RegisterNetEvent('QBCore:Client:UseItem', function(item)
+    TriggerServerEvent('QBCore:Server:UseItem', item)
+end)
+```
+
+### QBCore:Command:ShowMe3D
+
+* Used for the /me command
+
+```lua
+-- Logic for the text 
+local function Draw3DText(coords, str)
+    local onScreen, worldX, worldY = World3dToScreen2d(coords.x, coords.y, coords.z)
+	local camCoords = GetGameplayCamCoord()
+	local scale = 200 / (GetGameplayCamFov() * #(camCoords - coords))
+    if onScreen then
+        SetTextScale(1.0, 0.5 * scale)
+        SetTextFont(4)
+        SetTextColour(255, 255, 255, 255)
+        SetTextEdge(2, 0, 0, 0, 150)
+		SetTextProportional(1)
+		SetTextOutline()
+		SetTextCentre(1)
+        BeginTextCommandDisplayText("STRING")
+        AddTextComponentSubstringPlayerName(str)
+        EndTextCommandDisplayText(worldX, worldY)
+    end
+end
+
+RegisterNetEvent('QBCore:Command:ShowMe3D', function(senderId, msg)
+    local sender = GetPlayerFromServerId(senderId)
+    CreateThread(function()
+        local displayTime = 5000 + GetGameTimer()
+        while displayTime > GetGameTimer() do
+            local targetPed = GetPlayerPed(sender)
+            local tCoords = GetEntityCoords(targetPed)
+            Draw3DText(tCoords, msg)
+            Wait(0)
+        end
+    end)
+end)
+```
+
+### QBCore:Client:OnSharedUpdate
+
+* Event to refresh a shared single value without needing to restart qb-core
+
+```lua
+RegisterNetEvent('QBCore:Client:OnSharedUpdate', function(tableName, key, value)
+    QBCore.Shared[tableName][key] = value
+    TriggerEvent('QBCore:Client:UpdateObject')
+end)
+```
+
+### QBCore:Client:OnSharedUpdateMultiple
+
+* Event to refresh a shared table without needing to restart qb-core
+
+```lua
+RegisterNetEvent('QBCore:Client:OnSharedUpdateMultiple', function(tableName, values)
+    for key, value in pairs(values) do
+        QBCore.Shared[tableName][key] = value
+    end
+    TriggerEvent('QBCore:Client:UpdateObject')
+end)
+```

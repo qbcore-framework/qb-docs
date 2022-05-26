@@ -6,7 +6,7 @@ description: >-
 layout: landing
 ---
 
-# Introduction
+# 👋 Introduction
 
 ## Getting Started
 
@@ -29,16 +29,6 @@ _Sonoran Software offers:_
 &#x20;• [Premium Server Hosting](https://sonoranservers.com/kakarot)
 
 ****![](.gitbook/assets/sonoranbanner.png)****
-
-## Zap Hosting
-
-_Are you in the market for a reliable, DDoS protected host for your FiveM or RedM server? Zap hosting offers multiple services at a competitive rate including game servers, virtual machines & dedicated machines!_
-
-**Visit them today:** [https://zap-hosting.com/qbcore](https://zap-hosting.com/qbcore) & use code "qbcore" for 20% off
-
-[![image-text](https://cdn.discordapp.com/attachments/832108142665924668/968688682993344542/imageedit\_3\_9358453729.png)](https://zap-hosting.com/qbcore)
-
-![](.gitbook/assets/zapbanner.png)
 
 ## License
 

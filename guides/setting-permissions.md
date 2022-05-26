@@ -13,7 +13,7 @@ Aces are the built-in permissions system provided by CFX. They allow for creatin
 </details>
 
 {% hint style="success" %}
-txAdmin should automatically the server owner as the highest permission level
+txAdmin should automatically set the server owner as the highest permission level
 {% endhint %}
 
 ## Server Config

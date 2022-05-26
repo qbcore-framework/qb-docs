@@ -36,7 +36,7 @@ description: A list of all the commands and their respective resource
 * /openserver - opens server for everyone
 * /closeserver - close the server for people without permissions
 * /car - spawns a vehicle
-* /dv - deletes currrnt vehicle
+* /dv - deletes current vehicle
 * /givemoney - gives money to the person
 * /setmoney - sets the amound of money player has
 * /job - displays the current job player has

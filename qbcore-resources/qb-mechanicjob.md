@@ -2,7 +2,7 @@
 description: Fix 'em up real good
 ---
 
-# 🧑🔧 🧑🔧 qb-mechanicjob
+# 🧑🔧 qb-mechanicjob
 
 ## Introduction
 

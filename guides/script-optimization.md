@@ -219,16 +219,16 @@ AddEventHandler('QBCore:Client:OnPlayerLoaded', function() -- Don't use this wit
     PlayerData = QBCore.Functions.GetPlayerData()
 end)
 
-AddEventHandler('QBCore:Client:OnPlayerUnload', function() -- Don't use this with the native method
+RegisterNetEvent('QBCore:Client:OnPlayerUnload', function() -- Don't use this with the native method
     isLoggedIn = false
     PlayerData = {}
 end)
 
-AddEventHandler('QBCore:Client:OnJobUpdate', function(JobInfo)
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
     PlayerData.job = JobInfo
 end)
 
-AddEventHandler('QBCore:Player:SetPlayerData', function(val)
+RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
     PlayerData = val
 end)
 ```

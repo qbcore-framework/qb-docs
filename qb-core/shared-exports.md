@@ -4,6 +4,23 @@ description: Learn how to use exports to update the shared dynamically!
 
 # ↗ Shared Exports
 
+| Function or Event                                |  Scope |                                            Description                                            |           returns          |
+| ------------------------------------------------ | :----: | :-----------------------------------------------------------------------------------------------: | :------------------------: |
+| exports\['qb-core']:AddItem(itemName, item)      | Server |          Accepts an item name and item object - will add new entry to QBCore.Shared.Items         |       boolean, string      |
+| exports\['qb-core']:AddJob(jobName, job)         | Server |           Accepts an job name and job object - will add new entry to QBCore.Shared.Jobs           |       boolean, string      |
+| exports\['qb-core']:AddGang(gangName, gang)      | Server |          Accepts an gang name and gang object - will add new entry to QBCore.Shared.Gangs         |       boolean, string      |
+| exports\['qb-core']:AddItems(items)              | Server | Accepts a table or array - will loop through the table and add new entries to QBCore.Shared.Items | boolean, string, errorItem |
+| exports\['qb-core']:AddJobs(jobs)                | Server |  Accepts a table or array - will loop through the table and add new entries to QBCore.Shared.Jobs | boolean, string, errorItem |
+| exports\['qb-core']:AddGangs(gangs)              | Server | Accepts a table or array - will loop through the table and add new entries to QBCore.Shared.Gangs | boolean, string, errorItem |
+| QBCore.Functions.AddItem(itemName, item)         | Server |          Accepts an item name and item object - will add new entry to QBCore.Shared.Items         |       boolean, string      |
+| QBCore.Functions.AddJob(jobName, Job)            | Server |           Accepts an job name and job object - will add new entry to QBCore.Shared.Jobs           |       boolean, string      |
+| QBCore.Functions.AddGang(gangName, gang)         | Server |          Accepts an gang name and gang object - will add new entry to QBCore.Shared.Gangs         |       boolean, string      |
+| QBCore.Functions.AddItems(items)                 | Server | Accepts a table or array - will loop through the table and add new entries to QBCore.Shared.Items | boolean, string, errorItem |
+| QBCore.Functions.AddJobs(jobs)                   | Server |  Accepts a table or array - will loop through the table and add new entries to QBCore.Shared.Jobs | boolean, string, errorItem |
+| QBCore.Functions.AddGangs(gangs)                 | Server | Accepts a table or array - will loop through the table and add new entries to QBCore.Shared.Gangs | boolean, string, errorItem |
+| TriggerServerEvent('QBCore:Sever:UpdateObject')  | Server |          Accepts nothing - used to update the core object (PLEASE USE THE BELOW EXAMPLE)          |            none            |
+| TriggerClientEvent('QBCore:Client:UpdateObject') | Client |          Accepts nothing - used to update the core object (PLEASE USE THE BELOW EXAMPLE)          |            none            |
+
 ## Import Jobs
 
 * This method allows for any resource to insert job data into the shared file for the core. That means that you can make a resource, and on load, make those jobs available for use. This can be accomplished through one the ways shown below. Utilizing the function requires importing the core but using the export does not

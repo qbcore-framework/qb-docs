@@ -6,7 +6,7 @@ description: Installing a QBCore Server on Linux step by step
 
 ## MariaDB
 
-While Windows has XAMPP, we'll be using a standalone version of SQL called MariaDB. We will be installing this via shell.&#x20;
+While Windows has XAMPP, we'll be using a standalone version of SQL called MariaDB. We will be installing this via shell.
 
 The first thing that is recommended to do before installing a package is updating your system, we do that with the following command
 
@@ -76,8 +76,8 @@ FLUSH PRIVILEGES;
 
 \
 Localhost is a bit tricky. Since Linux does not natively feature a Desktop Environment, you will most likely access the database with the user remotely. To do so, instead of localhost, enter a % (A % means any host) so it looks as **'user1'@%**\
-****\
-****We will be covering how to connect and what ports to open below.
+\*\*\*\*\
+\*\*\*\*We will be covering how to connect and what ports to open below.
 {% endhint %}
 
 ### Allowing remote access (DB)
@@ -96,11 +96,9 @@ Editing in nano is fairly simple, it's the same as using a notepad but without a
 
 After you've edited the bind address to 0.0.0.0, you can exit the file using CTRL+X, pressing Y when prompted to save changes and Enter when prompted what to save the file as (It will always be the same file name as when it was open).
 
-![After pressing CTRL+X we press Y to save changes](<../.gitbook/assets/Terminus\_Sf4x4s5sbx (1).png>)
+![After pressing CTRL+X we press Y to save changes](../.gitbook/assets/Terminus\_Sf4x4s5sbx.png)
 
-![Leave the file name the same and press enter.](<../.gitbook/assets/Terminus\_Ot5jFzizkD (1).png>)
-
-
+![Leave the file name the same and press enter.](../.gitbook/assets/Terminus\_Ot5jFzizkD.png)
 
 After that, we restart the mariadb service to confirm changes to the files using the commands below
 
@@ -141,4 +139,3 @@ sudo iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
 ```
 
 You can check if the port is open and able to be seen by using this website [here](https://portchecker.co/).
-

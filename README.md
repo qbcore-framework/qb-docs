@@ -14,6 +14,10 @@ The community offers support for the framework through [Discord](https://discord
 
 The easiest way to get started with a QBCore server is to use the txAdmin recipe built into their platform! To begin setting up your server you can refer to [windows-installation.md](guides/windows-installation.md "mention") or [linux-installation.md](guides/linux-installation.md "mention"). If you have more questions about txAdmin then feel free to join their [discord](https://discord.gg/r7d894sTHA).
 
+{% hint style="success" %}
+Rent a [txAdmin](https://zap-hosting.com/qbcore6) server today!
+{% endhint %}
+
 ![](<.gitbook/assets/image (4).png>)
 
 ## Sonoran Software

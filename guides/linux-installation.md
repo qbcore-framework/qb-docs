@@ -96,9 +96,9 @@ Editing in nano is fairly simple, it's the same as using a notepad but without a
 
 After you've edited the bind address to 0.0.0.0, you can exit the file using CTRL+X, pressing Y when prompted to save changes and Enter when prompted what to save the file as (It will always be the same file name as when it was open).
 
-![After pressing CTRL+X we press Y to save changes](../.gitbook/assets/Terminus\_Sf4x4s5sbx.png)
+![After pressing CTRL+X we press Y to save changes](<../.gitbook/assets/Terminus\_Sf4x4s5sbx (1).png>)
 
-![Leave the file name the same and press enter.](../.gitbook/assets/Terminus\_Ot5jFzizkD.png)
+![Leave the file name the same and press enter.](<../.gitbook/assets/Terminus\_Ot5jFzizkD (1).png>)
 
 After that, we restart the mariadb service to confirm changes to the files using the commands below
 

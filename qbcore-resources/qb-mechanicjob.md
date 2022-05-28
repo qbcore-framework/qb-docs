@@ -2,7 +2,7 @@
 description: Fix 'em up real good
 ---
 
-# 🧑🔧 qb-mechanicjob
+# 🧑🔧 🧑🔧 qb-mechanicjob
 
 ## Introduction
 
@@ -10,7 +10,7 @@ description: Fix 'em up real good
 
 ## Preview
 
-![Displays vehicle heath](../.gitbook/assets/mechanicchatstatus.png)
+![Displays vehicle heath](<../.gitbook/assets/mechanicchatstatus (1).png>)
 
 ![Menu for mechanics to work on cars](../.gitbook/assets/mechanicmenu.png)
 

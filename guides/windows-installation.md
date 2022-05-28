@@ -14,7 +14,7 @@ Install [XAMPP ](https://www.apachefriends.org/download.html)and [HeidiSQL.](htt
 
 Start XAMPP and start the first two boxes, "Apache" and "MySQL"
 
-![Marking the checkbox will install the corresponding service on your machine](../.gitbook/assets/zFwKbxO.png)
+![Marking the checkbox will install the corresponding service on your machine](<../.gitbook/assets/zFwKbxO (1).png>)
 
 ## HeidiSQL
 
@@ -24,7 +24,7 @@ Start XAMPP and start the first two boxes, "Apache" and "MySQL"
 The names don't matter, you can name them whatever you want!
 {% endhint %}
 
-![Press new to create a session ](https://i.imgur.com/gMahSUE.png)
+![Press new to create a session](https://i.imgur.com/gMahSUE.png)
 
 ![Rename this to whatever you'd like and press open](https://i.imgur.com/IOmBame.png)
 

@@ -4,7 +4,11 @@ description: It's never been so easy!
 
 # 📀 Rent a FiveM Server
 
-<a href="https://zap-hosting.com/qbcore2"><img src="https://zap-hosting.com/interface/download/images.php?type=affiliate&id=230815" alt="ZAP-Hosting Gameserver and Webhosting"></a>
+![Use code "qbcore" for 20% off!](.gitbook/assets/zapbanner2.png)
+
+{% hint style="success" %}
+Click on the banner to get started!
+{% endhint %}
 
 The exclusive official authorized & recommended host of FiveM & RedM servers.
 

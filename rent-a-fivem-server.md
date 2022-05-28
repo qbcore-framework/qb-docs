@@ -4,7 +4,7 @@ description: It's never been so easy!
 
 # 📀 Rent a FiveM Server
 
-![Use code "qbcore" for 20% off!](.gitbook/assets/zapbanner2.png)
+[![Use code "qbcore" for 20% off!](.gitbook/assets/zapbanner2.png)](https://zap-hosting/qbcore)
 
 {% hint style="success" %}
 Click on the banner to get started!

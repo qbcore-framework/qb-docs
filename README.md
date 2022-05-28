@@ -12,7 +12,7 @@ layout: landing
 
 The community offers support for the framework through [Discord](https://discord.gg/qbcore) and [Guilded](https://guilded.gg/qbcore)
 
-The easiest way to get started with a QBCore server is to use the txAdmin recipe built into their platform**!** To begin setting up your server you can refer to [windows-installation.md](guides/windows-installation.md "mention") or [linux-installation.md](guides/linux-installation.md "mention"). If you have more questions about txAdmin then feel free to join their [discord](https://discord.gg/r7d894sTHA).
+The easiest way to get started with a QBCore server is to use the txAdmin recipe built into their platform! To begin setting up your server you can refer to [windows-installation.md](guides/windows-installation.md "mention") or [linux-installation.md](guides/linux-installation.md "mention"). If you have more questions about txAdmin then feel free to join their [discord](https://discord.gg/r7d894sTHA).
 
 ![](<.gitbook/assets/image (4).png>)
 
@@ -20,15 +20,13 @@ The easiest way to get started with a QBCore server is to use the txAdmin recipe
 
 _Sonoran Software offers:_
 
-&#x20;• [The most Advanced, Integrated CAD Software](https://sonorancad.com/kakarot)
+• [The most Advanced, Integrated CAD Software](https://sonorancad.com/kakarot)
 
-&#x20;• [Complete Community Management Software](https://sonorancms.com/kakarot)
+• [Complete Community Management Software](https://sonorancms.com/kakarot)
 
-&#x20;• [In-depth Radio Communications Simulator](https://sonoranradio.com/kakarot)
+• [In-depth Radio Communications Simulator](https://sonoranradio.com/kakarot)
 
-&#x20;• [Premium Server Hosting](https://sonoranservers.com/kakarot)
-
-****![](.gitbook/assets/sonoranbanner.png)****
+![](.gitbook/assets/sonoranbanner.png)
 
 ## License
 

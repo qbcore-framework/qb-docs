@@ -65,8 +65,10 @@ Config.Locations = {
         drawtextui = { -- Displays when going into shop zone
             text = "Bennys Motorworks"
         },
-        restrictions = { -- Restrict vehicle classes (optional)
-            deniedClasses = { 18 }
+        restrictions = { 
+            job = { 'bennys', 'mechanic'}, -- Whitelist Jobs (optional)
+            allowedClasses = { 18 }, -- Whitelist vehicle classes (optional)
+            deniedClasses = { 18 } -- Restrict vehicle classes (optional)
         },
         zones = { -- Data for box zones to enter shop
             {

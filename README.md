@@ -18,7 +18,7 @@ The easiest way to get started with a QBCore server is to use the txAdmin recipe
 Rent a [txAdmin](https://zap-hosting.com/qbcore6) server today!
 {% endhint %}
 
-![](<.gitbook/assets/image (4).png>)
+![](<.gitbook/assets/image (4) (1).png>)
 
 ## Sonoran Software
 

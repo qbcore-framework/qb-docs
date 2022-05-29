@@ -3,6 +3,11 @@
 * [👋 Introduction](README.md)
 * [📀 Rent a FiveM Server](rent-a-fivem-server.md)
 
+## Project Sponsors
+
+* [✍ JetBrains](project-sponsors/jetbrains.md)
+* [📚 GitBook](project-sponsors/gitbook.md)
+
 ## Guides
 
 * [🪟 Windows Installation](guides/windows-installation.md)

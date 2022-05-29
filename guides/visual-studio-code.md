@@ -42,7 +42,9 @@ Make sure you check the "Open with code" boxes!
 
 ![](../.gitbook/assets/darkonepro.png)
 
-* [Fire Code Font](https://fonts.google.com/specimen/Fira+Code) (cosmetic only)
+## Fonts
+
+### Fira Code
 
 {% hint style="info" %}
 Download file, double click the ttf files and install the font
@@ -55,6 +57,20 @@ File -> Preferences -> Settings -> Font Family -> Fira Code
 {% endhint %}
 
 ![](../.gitbook/assets/firacodeexample.png)
+
+### JetBrains Mono
+
+{% hint style="info" %}
+Download file, double click the ttf files you want and install the font
+{% endhint %}
+
+{% file src="../.gitbook/assets/JetBrainsMono-2.242.zip" %}
+
+{% hint style="success" %}
+File -> Preferences -> Settings -> Font Family -> JetBrains Mono
+{% endhint %}
+
+![](../.gitbook/assets/jetbrainsfont.png)
 
 ## Extension Settings
 

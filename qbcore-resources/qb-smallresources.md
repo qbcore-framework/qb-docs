@@ -127,6 +127,8 @@ Config.BlacklistedPeds = { -- these NPCs will delete themslves on spawn
 
 {% hint style="warning" %}
 When adding new consumables you need to go into the server/consumables.lua and make that item useable with the `QBCore.Functions.CreateUseableItem` function more info on how to do that in [server-function-reference.md](../qb-core/server-function-reference.md "mention")&#x20;
+
+You can also increase the thirst or hunger with ["itemname"] = math.random(-20, -10) or a single number, the only important thing is that the lower number is first
 {% endhint %}
 
 ```lua

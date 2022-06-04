@@ -99,7 +99,7 @@ RegisterCommand('testremovemoney, function(source)
     local Player = QBCore.Functions.GetPlayer(source)
     if not Player then return end
     local job = Player.PlayerData.job.name
-    exports['qb-management']:AddMoney(job, 500) -- Remove $500 society account
+    exports['qb-management']:RemoveMoney(job, 500) -- Remove $500 society account
 end)
 ```
 

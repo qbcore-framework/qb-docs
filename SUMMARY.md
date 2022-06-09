@@ -18,7 +18,7 @@
 * [📝 Visual Studio Code](guides/visual-studio-code.md)
 * [🔗 Useful Links](guides/useful-links.md)
 
-## QB-COre
+## QB-Core
 
 * [📜 Shared](qb-core/shared.md)
 * [↗ Shared Exports](qb-core/shared-exports.md)

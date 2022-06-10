@@ -26,7 +26,7 @@ Make sure you check the "Open with code" boxes!
 
 ![](../.gitbook/assets/prettier.png)
 
-* [FiveM natives](https://fonts.google.com/specimen/Fira+Code)
+* [FiveM natives](https://marketplace.visualstudio.com/items?itemName=fivem-vscode.fivem-vscode)
 
 ![](../.gitbook/assets/fivemnatives.png)
 

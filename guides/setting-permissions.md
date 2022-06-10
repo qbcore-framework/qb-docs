@@ -70,9 +70,9 @@ add_principal qbcore.god qbcore.admin # Allow gods access to admin commands
 add_principal qbcore.admin qbcore.mod # Allow admins access to mod commands
 
 # Players
-add_principal qbcore.god identifier.license:xxxxxx # Player Name
-add_principal qbcore.admin identifier.license:xxxxxx # Player Name
-add_principal qbcore.mod identifier.license:xxxxxx # Player Name
+add_principal identifier.license:xxxxxx qbcore.god # Player Name
+add_principal identifier.license:xxxxxx qbcore.admin # Player Name
+add_principal identifier.license:xxxxxx qbcore.mod # Player Name
 ```
 
 ## Setting users permissions in the server

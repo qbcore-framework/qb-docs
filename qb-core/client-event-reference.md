@@ -40,7 +40,7 @@ On player load this event checks is triggered after checking the qb-core config 
 
 ```lua
 RegisterNetEvent('QBCore:Client:PvpHasToggled', function(pvp_state)
-    print('PVP mode has been set to '..pvp_state'!')
+    print('PVP mode has been set to '..pvp_state..'!')
 end)
 ```
 

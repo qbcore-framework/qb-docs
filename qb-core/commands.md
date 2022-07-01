@@ -13,7 +13,7 @@ description: A list of all the commands and their respective resource
 * /noclip - activates noclip
 * /admincar - saves current vehicle to garrage
 * /announce - creates an announcement
-* /report create a report to staff
+* /report - create a report to staff
 * /staffchat - sends a staff only message
 * /givenuifocus - Sets mouse on/off
 * /warn - warns a player

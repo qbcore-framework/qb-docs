@@ -139,3 +139,33 @@ sudo iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
 ```
 
 You can check if the port is open and able to be seen by using this website [here](https://portchecker.co/).
+
+## Running Artifacts
+
+Using artifacts is the most important bit, because it is essentially the brain of the server. We use wget, a tool present on the Linux system to directly download the archive from Cfx's Webpage. [Here](https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/) is a list of all Linux artifacts, but it's best if you just get the latest one. Once you've made your decision on which version of the artifacts to get, simply right click and use "Copy Link". This will copy a direct link to the artifacts that we'll use in the wget command.
+
+Move to whichever folder you are going to download the file to. (I usually make a seperate folder for Artifacts and Files, just so they're seperated.) Use the following command (Remember to replace the link with whatever you get from the Artifacts website)
+
+```
+wget https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/5742-ded89bc6acf29a720a7686a1de70d28b62c75af8/fx.tar.xz
+```
+
+![Using wget](https://user-images.githubusercontent.com/89489089/179919507-a17cbce0-5307-4a34-9bf1-64acdd68e29c.png)
+
+After this is done, you will have the files in the directory you currently are. You then simply "untar" the archive with the tar command found below
+
+```
+tar -xf fx.tar.xz
+```
+
+The console will hang for a bit. After it is done, you should see the files in the directory after you run the dir command.
+
+![Using tar and dir command](https://user-images.githubusercontent.com/89489089/179920224-e8c933b9-91a2-4dc9-9ba5-71dc7e59484d.png)
+
+The only thing left to do now is running the actual artifacts. While Windows uses .exe and .bat files, Linux uses so called .sh files to run Cfx Artifacts. Make sure that you're in a screen like we've discussed earlier and run the following command in the directory with the run.sh file to start your FiveM server.
+
+```
+./run.sh
+```
+
+The rest of the setup is relatively easy, since you are now setting up txAdmin, it is identical to the Windows installation. Continue the tutorial in the Windows section, just skipping the part about the artifacts and continuing after the .exe is ran [here](https://docs.qbcore.org/qbcore-documentation/guides/windows-installation#artifact-and-txadmin).

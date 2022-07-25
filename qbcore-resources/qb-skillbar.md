@@ -45,6 +45,7 @@ end)
 
 ```lua
 local neededAttempts = 5 -- how many succesful attempts it takes to pass
+local succeededAttempts = 0 -- changes dynamically do not edit
 
 RegisterCommand('skillbarmulti', function()
     local Skillbar = exports['qb-skillbar']:GetSkillbarObject()

@@ -10,6 +10,7 @@
 * [📚 GitBook](project-sponsors/gitbook.md)
 * [🗃 Pleb Masters: Forge](project-sponsors/pleb-masters-forge.md)
 * [🤖 cDev](project-sponsors/cdev.md)
+* [🎥 KakarotDevs](project-sponsors/kakarotdevs.md)
 
 ## Guides
 

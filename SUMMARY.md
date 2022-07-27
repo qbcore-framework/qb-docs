@@ -9,6 +9,7 @@
 * [✍ JetBrains](project-sponsors/jetbrains.md)
 * [📚 GitBook](project-sponsors/gitbook.md)
 * [🗃 Pleb Masters: Forge](project-sponsors/pleb-masters-forge.md)
+* [🤖 cDev](project-sponsors/cdev.md)
 
 ## Guides
 

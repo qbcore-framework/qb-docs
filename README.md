@@ -20,18 +20,6 @@ Rent a [txAdmin](https://zap-hosting.com/qbcore6) server today!
 
 ![](<.gitbook/assets/image (4) (1).png>)
 
-## Sonoran Software
-
-_Sonoran Software offers:_
-
-• [The most Advanced, Integrated CAD Software](https://sonorancad.com/kakarot)
-
-• [Complete Community Management Software](https://sonorancms.com/kakarot)
-
-• [In-depth Radio Communications Simulator](https://sonoranradio.com/kakarot)
-
-![](.gitbook/assets/sonoranbanner.png)
-
 ## License
 
 **QBCore Framework Copyright (C) 2022 Joshua Eger**

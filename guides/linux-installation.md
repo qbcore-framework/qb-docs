@@ -96,9 +96,9 @@ Editing in nano is fairly simple, it's the same as using a notepad but without a
 
 After you've edited the bind address to 0.0.0.0, you can exit the file using CTRL+X, pressing Y when prompted to save changes and Enter when prompted what to save the file as (It will always be the same file name as when it was open).
 
-![After pressing CTRL+X we press Y to save changes](<../.gitbook/assets/Terminus\_Sf4x4s5sbx (1).png>)
+![After pressing CTRL+X we press Y to save changes](../.gitbook/assets/Terminus\_Sf4x4s5sbx.png)
 
-![Leave the file name the same and press enter.](<../.gitbook/assets/Terminus\_Ot5jFzizkD (1).png>)
+![Leave the file name the same and press enter.](../.gitbook/assets/Terminus\_Ot5jFzizkD.png)
 
 After that, we restart the mariadb service to confirm changes to the files using the commands below
 
@@ -142,7 +142,7 @@ You can check if the port is open and able to be seen by using this website [her
 
 ## Running Artifacts
 
-Using artifacts is the most important bit, because it is essentially the brain of the server. We use wget, a tool present on the Linux system to directly download the archive from Cfx's Webpage. [Here](https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/) is a list of all Linux artifacts, but it's best if you just get the latest one. Once you've made your decision on which version of the artifacts to get, simply right click and use "Copy Link". This will copy a direct link to the artifacts that we'll use in the wget command.
+Using artifacts is the most important bit, because it is essentially the brain of the server. We use wget, a tool present on the Linux system to directly download the archive from Cfx's Webpage. [Here](https://runtime.fivem.net/artifacts/fivem/build\_proot\_linux/master/) is a list of all Linux artifacts, but it's best if you just get the latest one. Once you've made your decision on which version of the artifacts to get, simply right click and use "Copy Link". This will copy a direct link to the artifacts that we'll use in the wget command.
 
 Move to whichever folder you are going to download the file to. (I usually make a seperate folder for Artifacts and Files, just so they're seperated.) Use the following command (Remember to replace the link with whatever you get from the Artifacts website)
 

@@ -3,6 +3,7 @@
 * [👋 Introduction](README.md)
 * [📀 Rent a FiveM Server](rent-a-fivem-server.md)
 * [🚨 Sonoran Software](sonoran-software.md)
+* [⚒ Codesign scripts](codesign-scripts.md)
 
 ## Project Sponsors
 

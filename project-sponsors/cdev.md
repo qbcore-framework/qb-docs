@@ -38,7 +38,7 @@ We have the in house experience in running community's, we understand running a 
 * **Kings#4220**:  _The bot I purchased @NovaKing is one of the most features rich bots I've had on a server up acts as a "all-in-one" bot so no more having 12 different bots doing each one small thing some of the features come in handy like the sticky message feature and the suggestions feature would definitely recommend buying this bot for any growing/big community_
 * **Carmomeister#7655**: _The crew here at cDev equipped us with our bot (CQC) for our FiveM Development Community. We've experienced excellent assistance from the cDev team, especially @onesource , and the capabilities included with the bot are incredibly useful. We've loved it so much that we've decided to get a second one for our FiveM Server. We recommend purchasing this bot for your server, whether it's an RP server or a Community server. This is the "All-In-One" bot you will undoubtedly fall in love with._
 
-![](../.gitbook/assets/cdevbanner2.png)
+![Psstttt. Use code QBCORE for 10% off your next purchase!](../.gitbook/assets/cdevbanner2.png)
 
 {% embed url="https://store.cdev.shop/" %}
 **cDev Webstore**

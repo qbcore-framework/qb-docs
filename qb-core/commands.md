@@ -6,25 +6,30 @@ description: A list of all the commands and their respective resource
 
 ### AdminMenu
 
-* /admin - opens the admin menu
-* /blips - activates player blips
-* /names - activates player names
-* /coords - displays your current coords
-* /noclip - activates noclip
-* /admincar - saves current vehicle to garrage
-* /announce - creates an announcement
-* /report - create a report to staff
-* /staffchat - sends a staff only message
-* /givenuifocus - Sets mouse on/off
-* /warn - warns a player
-* /checkwarns - checks warning of a player
-* /delwarn - deletes a warning from a player
-* /reportr - replies to a report
-* /setmodel - changes the players ped model
-* /setspeed - set players foot speed
-* /reporttoggle - toggle the reports
-* /killall - kills all players in server
-* /setammo - sets ammo to current gun in hand
+`/admin` : (admin) opens the admin menu  
+`/blips` : (admin) toggles player blips  
+`/names` : (admin) toggles player names  
+`/coords` : (admin) toggles display of your current coords  
+`/maxmods` : (admin) sets vehicle to have maximum performance modifications
+`/noclip` : (admin) toggles noclip  
+`/admincar` : (admin) saves current vehicle to garage  
+`/announce [message]` : (admin) creates an announcement with the given argument `message`  
+`/report [message]` : (user) create a report to staff with the given `message`  
+`/staffchat [message]` : (admin) sends a staff only message  
+`/givenuifocus [id] [hasFocus] [hasCursor]` : (admin) Sets `nuifocus` state for the player with the given `id`  
+`/warn [id] [reason]` : (admin) warns a player  
+`/checkwarns [id] [warningNum]` : (admin) view a warning (number) that was given a player  
+`/delwarn [id] [warningNum]` : (admin) deletes a warning from a player  
+`/reportr [message]` : (admin) replies to a report with the given `message`  
+`/setmodel [model] [id]` : (admin) changes the players ped model  
+`/setspeed [speed]` : (admin) set players foot speed  
+`/reporttoggle` : (admin) opt in to receiving player reports  
+`/kickall` : (god) kicks all players from server  
+`/setammo [amount] [opt: weapon]` : (admin) sets ammo to current gun in hand, or `weapon` if given  
+`/vector2` : (admin) Copies `vector2(x, y)` to clipboard of your current coords  
+`/vector3` : (admin) Copies `vector3(x, y, z)` to clipboard of your current coords  
+`/vector4` : (admin) Copies `vector4(x, y, z, w)` to clipboard of your current coords  
+`/heading` : (admin) Copies your heading to clipboard  
 
 ### Core
 

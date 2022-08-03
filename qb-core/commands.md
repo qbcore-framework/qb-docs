@@ -276,6 +276,16 @@ Copies heading `w` to clipboard of your current heading (the direction you are f
 
 </details>
 
+<details>
+
+<summary>/maxmods - max upgrade car </summary>
+
+sets max upgrades in bennys to any car you are siting in
+
+**Permission level:** admin
+
+</details>
+
 ### Core
 
 * /tp - teletport to a player

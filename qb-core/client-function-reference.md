@@ -491,7 +491,7 @@ QBCore.Functions.SpawnVehicle('adder', function(veh)
     SetEntityHeading(veh, coords.w)
     exports['LegacyFuel']:SetFuel(veh, 100.0)
     TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
-    TriggerEvent("vehiclekeys:client:SetOwner", GetVehicleNumberPlateText(veh))
+    TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
     SetVehicleEngineOn(veh, true, true)
 end, coords, true)
 ```

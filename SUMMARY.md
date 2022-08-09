@@ -1,7 +1,7 @@
 # Table of contents
 
 * [👋 Introduction](README.md)
-* [📀 Rent a FiveM Server](rent-a-fivem-server.md)
+* [📀 Rent a FiveM Server](https://zap-hosting.com/qbcore)
 * [🚨 Sonoran Software](sonoran-software.md)
 * [⚒ Codesign scripts](codesign-scripts.md)
 * [🆗 okok Scripts](okok-scripts.md)

@@ -278,35 +278,299 @@ Copies heading `w` to clipboard of your current heading (the direction you are f
 
 ### Core
 
-* /tp - teletport to a player
-* /tpm - teleport to a marked location
-* /togglepvp - toggle PVP on server
-* /addpermission - gives a player permisions on server
-* /removepermissions - removes a players permissions on server
-* /openserver - opens server for everyone
-* /closeserver - close the server for people without permissions
-* /car - spawns a vehicle
-* /dv - deletes current vehicle
-* /givemoney - gives money to the person
-* /setmoney - sets the amound of money player has
-* /job - displays the current job player has
-* /setjob - sets a job to a player
-* /gang - check players current gang
-* /setgang - sets a player to a gang
-* /clearinv - clears your inventory
-* /ooc - ooc chat command
-* /me - shows a message above users head
+<details>
+
+<summary>/tp [id / x] [opt: y] [opt: z]- teleport to player or location</summary>
+
+Teleports you to either a player with the given `id` or to a given `x, y, z` location
+
+**Permission level:** admin
+
+* **id or x** - (required) The player id or x coordinate
+* **y** - (optional) The y coordinate (required if using x for the first argument)
+* **z** - (optional) The z coordinate (required if using x for the first argument)
+
+</details>
+
+<details>
+
+<summary>/tpm - teleport to a marked location</summary>
+
+Teleports you to the marked location on the map.&#x20;
+
+**Permission level:** admin
+
+</details>
+
+<details>
+
+<summary>/togglepvp - toggle PVP on server</summary>
+
+Toggles Player vs Player mode on the server
+
+**Permission level:** admin
+
+</details>
+
+<details>
+
+<summary>/addpermission [id] [permission] - gives a player a permission</summary>
+
+Gives a player with the given `id` the given `permission` level. The player must be online.
+
+**Permission level:** god
+
+</details>
+
+<details>
+
+<summary>/removepermission [id] [permission] - removes a player permission</summary>
+
+Removes the given `permission` from the player with the given `id`. The player must be online.
+
+**Permission level:** god
+
+</details>
+
+<details>
+
+<summary>/openserver - open the server for everyone</summary>
+
+Opens the server allowing everyone to join.
+
+**Permission level:** admin
+
+</details>
+
+<details>
+
+<summary>/closeserver [reason] - close the server for people without permission</summary>
+
+Closes the server for people without the correct permission. Kicks any players currently online without the required permission giving the `reason` in the kick message.&#x20;
+
+**Permission level:** admin
+
+</details>
+
+<details>
+
+<summary>/car [model] - spawns a vehicle</summary>
+
+Spawns a vehicle of the given `model` type.
+
+**Permission level:** admin
+
+</details>
+
+<details>
+
+<summary>/dv - delete vehicle</summary>
+
+Deletes the vehicle you are sitting in or deletes all vehicles within 5.0 units of your position.
+
+**Permission level:** admin
+
+</details>
+
+<details>
+
+<summary>/givemoney [id] [type] [amount] - give money to a player</summary>
+
+Gives money to a player
+
+**Permission level:** admin
+
+* **id** - (required) The `id` of the player
+* **type** - (required) The money type \[cash, bank etc...]
+* **amount** - (required) The amount to give
+
+</details>
+
+<details>
+
+<summary>/setmoney [id] [type] [amount] - set the amount of money a player has</summary>
+
+Sets the amount of money a player has.
+
+**Permission level:** admin
+
+* **id** - (required) The `id` of the player
+* **type** - (required) The money type \[cash, bank etc...]
+* **amount** - (required) The amount to set
+
+</details>
+
+<details>
+
+<summary>/job - display your current job</summary>
+
+Displays your current job name and grade
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/setjob [id] [job] [grade] - sets a players job</summary>
+
+Sets a player with the given `id` to have the given `job` with the given `grade`
+
+**Permission level:** admin
+
+* **id -** (required) The `id` of the player
+* **job** - (required) The job name
+* **grade** - (required) The job grade
+
+</details>
+
+<details>
+
+<summary>/gang - display your current gang</summary>
+
+Displays your current gang name and grade
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/setgang [id] [gang] [grade] - sets a players gang</summary>
+
+Sets a player with the given `id` to be part of the given `gang` with the given `grade`
+
+**Permission level:** admin
+
+* **id** - (required) The `id` of the player
+* **gang** - (required) The gang name
+* **grade** (required) The gang grade
+
+</details>
+
+<details>
+
+<summary>/clearinv [opt: id]- clears a players inventory</summary>
+
+Clears the inventory of a player with the given `id` or your own inventory if no `id` is given
+
+**Permission level:** admin
+
+* **id** - (optional) The id of a player
+
+</details>
+
+<details>
+
+<summary>/ooc [message] - ooc chat command</summary>
+
+Sends an out-of-character (ooc) message to the chat.
+
+**Permission level:** user
+
+* **message** - (required) The message to send
+
+</details>
+
+<details>
+
+<summary>/me [message] - shows a message above your head</summary>
+
+Shows a 3d text message above your head. Useful for enhancing roleplay.
+
+**Permission level:** user
+
+* **message** - (required) The message to display
+
+</details>
 
 ### Ambulancejob
 
-* /911e - sends a message to ems
-* /status - checks the status of a player
-* /heal - heals a player
-* /revivep - revives closest player
-* /revive - revives self (admin only)
-* /setpain - sets a pain level to the player (admin only)
-* /kill - kills the player (admin only)
-* /aheal - admin heal a player
+<details>
+
+<summary>/911e [message] - sends a message to EMS</summary>
+
+Sends a message to EMS players with the job 'ambulance'.
+
+**Permission level:** user
+
+* **message** - (required) The message to send
+
+</details>
+
+<details>
+
+<summary>/status - check the status of the nearest player</summary>
+
+This will find the closest player and check their health status
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/heal - heals the nearest player</summary>
+
+This will find the nearest player and heal them
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/revivep - revives the nearest player</summary>
+
+This will find the nearest player and revive them
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/revive - revive yourself</summary>
+
+Revives yourself to full health
+
+**Permission level:** admin
+
+</details>
+
+<details>
+
+<summary>/setpain [opt: id] - sets the pain level to the player</summary>
+
+Sets the pain level to the player with the given `id` or to yourself if no id is given.
+
+**Permission level:** admin
+
+</details>
+
+<details>
+
+<summary>/kill [opt: id] - kills the player</summary>
+
+Kills the player with the given `id` or kills yourself if no id is given.
+
+**Permission level:** admin
+
+* **id** - (optional) The player id
+
+</details>
+
+<details>
+
+<summary>/aheal [opt: id] - heals a player</summary>
+
+Heals a player with the given `id` or heals yourself if no id is given.
+
+**Permission level:** admin
+
+* **id** - (optional) The player id
+
+</details>
 
 ### Police
 

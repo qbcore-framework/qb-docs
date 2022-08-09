@@ -141,11 +141,88 @@ end)
 
 ## Commands
 
-* /911e - Sends a report to all players with ambulance job title
-* /status - Job locked command to check the closest players status
-* /heal - Job locked command to heal the closest player
-* /revivep - Job locked command to revive the closest player
-* /revive - Admin locked command to revive themselves or a player
-* /setpain - Admin locked command to set a players pain level
-* /kill - Admin locked command to kill themselves or a player
-* /aheal - Admin locked command to heal themselves or a player
+<details>
+
+<summary>/911e [message] - sends a message to EMS</summary>
+
+Sends a message to EMS players with the job 'ambulance'.
+
+**Permission level:** user
+
+* **message** - (required) The message to send
+
+</details>
+
+<details>
+
+<summary>/status - check the status of the nearest player</summary>
+
+This will find the closest player and check their health status
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/heal - heals the nearest player</summary>
+
+This will find the nearest player and heal them
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/revivep - revives the nearest player</summary>
+
+This will find the nearest player and revive them
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/revive - revive yourself</summary>
+
+Revives yourself to full health
+
+**Permission level:** admin
+
+</details>
+
+<details>
+
+<summary>/setpain [opt: id] - sets the pain level to the player</summary>
+
+Sets the pain level to the player with the given `id` or to yourself if no id is given.
+
+**Permission level:** admin
+
+</details>
+
+<details>
+
+<summary>/kill [opt: id] - kills the player</summary>
+
+Kills the player with the given `id` or kills yourself if no id is given.
+
+**Permission level:** admin
+
+* **id** - (optional) The player id
+
+</details>
+
+<details>
+
+<summary>/aheal [opt: id] - heals a player</summary>
+
+Heals a player with the given `id` or heals yourself if no id is given.
+
+**Permission level:** admin
+
+* **id** - (optional) The player id
+
+</details>

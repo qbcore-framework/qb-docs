@@ -103,7 +103,7 @@ Hackers will be ranked on the leaderboard where those with the best time and hig
 
 It features a fully adjustable user interface as well as the storyline and messages with 5 premade themes!
 
-![For a more extensive description please visit the link page below.](<.gitbook/assets/52WbHs1\[1] (1) (1) (1).png>)
+![For a more extensive description please visit the link page below.](<.gitbook/assets/52WbHs1\[1] (1) (2).png>)
 
 {% embed url="https://codesign.pro/package/4206364" %}
 

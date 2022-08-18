@@ -11,7 +11,7 @@ description: Obey & survive!
 * Police stash, garage and armory
 * Cuffing players functions
 * Evidence system including blood DNA drops and fingerprints
-* Anklet Tracker for police to track players&#x20;
+* Anklet Tracker for police to track players
 
 ## Configuration
 
@@ -341,31 +341,332 @@ end)
 
 ## Commands
 
-* /spikestrip - Places a spike strip on the ground punctures any tires that run over it
-* /grantlicense - Grants said license to a player I.E weapon/driving
-* /revokelicense - Revokes said license to a player I.E weapon/driving
-* /pobject - Places object on the floor IE cone/tent
-* /cuff - Hard cuffs the nearest player freezes them in place
-* /escort  - Attaches the nearest player to the player that uses this command
-* /callsign - Assigns player with a call sign on use
-* /clearcasings - Clears all the casings in the nearby area&#x20;
-* /jail - Sends a player to jail for a specific amount of time
-* /unjail - Release a player from jail
-* /clearblood - Clears all the blood drops in the nearby area
-* /seizecash - Seizes a players cash
-* /sc - Soft cuffs the nearest player allowing them to move freely but they are still cuffed&#x20;
-* /flagplate - Flags a plate for a reason the user inputs
-* /unflagplate - Remove a flagged plate&#x20;
-* /plateinfo - Checks to see if a plate is flagged more not
-* /depot - Impounds a vehicle for a price
-* /impound - Impounds a vehicle&#x20;
-* /paytow - Pays a tow truck driver
-* /paylawyer - Pays a lawyer
-* /anklet - Attaches anklet to the nearest player
-* /ankletlocation - Gives the user the location of a target player if they are wearing an anklet
-* /takedrivinglicense - Revokes driving license from a player
-* /takedna - Fills a "empty\_evidence\_bag" with targets dna
-* /911p - Calls the police
+<details>
+
+<summary>/911p [message] - sends an alert to the police</summary>
+
+This command sends an alert to all players with the job 'police'. The alert will contain the given `message` and a blip is added to the police player's map at your current location.
+
+**Permission level:** user
+
+* **message** - (required) The message to send with the alert
+
+</details>
+
+<details>
+
+<summary>/spikestrip - Place a spike strip</summary>
+
+Places a Spike Strip object on the ground. The player must have the job of 'police' and be on duty to use.
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/grantlicense [id] [license] - give a player a license</summary>
+
+Gives a player with the given `id` the license of the given `license` type.
+
+This command can only be used by players with the job of 'police' above the minimum grade as set by `Config.LicenseRank` (Default is grade 2 and above).&#x20;
+
+**Permission level:** user
+
+* **id** - (required) The id of the player
+* **license** - (required) The license type (E.g. "weapon" or "driver")
+
+</details>
+
+<details>
+
+<summary>/revokelicense [id] [license] - remove a player's license</summary>
+
+Removes a license of the given `license` type from a player with the given `id`.
+
+This command can only be used by players with the job of 'police' above the minimum grade as set by `Config.LicenseRank` (Default is grade 2 and above).&#x20;
+
+**Permission level:** user
+
+* **id** - (required) The id of the player
+* **license** - (required) The license type (E.g. "weapon" or "driver")
+
+</details>
+
+<details>
+
+<summary>/pobject [type] - allows officer to spawn an object</summary>
+
+Allows a player with the job of 'police' to spawn an object
+
+**Permission level:** user
+
+* **type** - (required) The object type. Available types:
+  * **cone** - a traffic cone
+  * **barrier** - a roadblock barrier
+  * **roadsign** - a road sign
+  * **tent** - a gazebo for crime scenes
+  * **light** - a work light
+  * **delete** - delete an object
+
+</details>
+
+<details>
+
+<summary>/cuff - cuff the nearest player</summary>
+
+This command will hard cuff the nearest player (prevents movement) .
+
+Can only be used by players with the job of 'police'
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/sc - soft cuff the nearest player</summary>
+
+This command will soft cuff the nearest player (allows movement).
+
+Can only be used by players with the job of 'police'
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/escort - escort the nearest player</summary>
+
+This command will escort the nearest player.
+
+Can only be used by players with the job of 'police'
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/callsign [name] - allows officer to set a callsign</summary>
+
+Allows a player with the job of 'police' to set their callsign. The callsign is visible as the name of the player's blip on the map.
+
+**Permission level:** user
+
+* **name** - (required) the callsign to be used
+
+</details>
+
+<details>
+
+<summary>/jail - sends nearest player to jail</summary>
+
+This command will send the nearest player to jail. A menu will open allowing the officer to set the jail time.
+
+Can only be used by players with the job of 'police'
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/unjail [id] - unjail a player</summary>
+
+Unjail a player with the given `id`
+
+Can only be used by players with the job of 'police'
+
+**Permission level:** user
+
+* **id** - (required) the id of the player
+
+</details>
+
+<details>
+
+<summary>/clearcasings - clears bullet casings in the area</summary>
+
+Clears any bullet casings with 10.0 units of your current location.
+
+Can only be used by players with the job of 'police'
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/clearblood - clears blood drops in the area</summary>
+
+Clears any blood drops with 10.0 units of your current location.
+
+Can only be used by players with the job of 'police'
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/seizecash - seize cash from the nearest player</summary>
+
+Seize cash from the nearest player.
+
+Can only be used by players with the job of 'police'
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/cam [id] - allows officer to see cam footage from selected spots</summary>
+
+Allows a player with the job of 'police' to view security cameras. Security camera locations can be set up in the config file of qb-policejob. See `Config.SecurityCameras`.
+
+**Permission level:** user
+
+* **id** - (required) the id of the camera
+
+</details>
+
+<details>
+
+<summary>/flagplate [plate] [reason] - allows speed cameras to find a plate flagged</summary>
+
+Allows speed cameras that can be set up in the config to find a flagged plate. See `Config.Radars`
+
+**Permission level:** user
+
+* **plate** - (required) the plate to be flagged
+* **reason** - (required) the reason for the flag
+
+</details>
+
+<details>
+
+<summary>/unflagplate [plate] - removes the flag from the plate</summary>
+
+Removes the flag on the plate so cameras will no longer pick up the plate.
+
+**Permission level:** user
+
+* **plate** - (required) the plate to be unflagged
+
+</details>
+
+<details>
+
+<summary>/plateinfo [plate] - shows the info of the plate</summary>
+
+Shows whether a plate is flagged and gives the reason if so.
+
+**Permission level:** user
+
+* **plate** - (required) the plate to check
+
+</details>
+
+<details>
+
+<summary>/depot [price] - allows officer to impound vehicle for a price</summary>
+
+Allows a player with the job of 'police' to send a vehicle to the impound for the given `price`
+
+**Permission level:** user
+
+* **price** - (required) the price set for removing vehicle from depot
+
+</details>
+
+<details>
+
+<summary>/impound - impounds a vehicle without a price</summary>
+
+impounds a vehicle without a price
+
+Can only be used by a player with the job of 'police'
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/paytow [id]  - pays the tow driver $500</summary>
+
+Pays the player with the given `id` $500. The player being paid must have the job of 'tow'.
+
+**Permission level:** user
+
+* **id** - (required) the id of the player being paid
+
+</details>
+
+<details>
+
+<summary>/paylawyer [id] - pays a lawyer $500</summary>
+
+Pays the player with the given `id` $500. The player being paid must have the job of 'lawyer'.
+
+**Permission level:** user
+
+* **id** - (required) the id of the player being paid
+
+</details>
+
+<details>
+
+<summary>/anklet - adds a tracking device to the closest player</summary>
+
+Adds a tracking device to the closest player.&#x20;
+
+Can only be used by players with the job of 'police'
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/ankletlocation [cid] - shows the location of the player</summary>
+
+Shows the location of the player with the given `ci`d
+
+Can only be used by players with the job of 'police'
+
+**Permission level:** user
+
+* **cid** - (required) the citizen id of the player being checked
+
+</details>
+
+<details>
+
+<summary>/takedrivinglicense - takes the players drivers license</summary>
+
+Takes the driving license of the closest player
+
+Can only be used by players with the job of 'police'
+
+**Permission level:** user
+
+</details>
+
+<details>
+
+<summary>/takedna [id] - takes the players dna</summary>
+
+Takes the dna of a player with a given `id`. Requires an empty evidence bag.
+
+**Permission level:** user
+
+* **id** - (required) the id of the player
+
+</details>
 
 ## Items
 

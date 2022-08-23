@@ -188,7 +188,6 @@ QBCore.Functions.Progressbar('Changeme', 'What the player sees', 1500, false, tr
     end, function()
         -- This code runs if the progress bar gets cancelled
     end)
-end)
 ```
 
 ### QBCore.Functions.GetVehicles

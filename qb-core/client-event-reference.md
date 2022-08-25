@@ -117,11 +117,11 @@ end)
 
 ### QBCore:Notify
 
-| Arguments |  Type  | Required |    Default    |
-| :-------: | :----: | :------: | :-----------: |
-|  message  | string |    yes   | 'Placeholder' |
-|    type   | string |    yes   |   'primary'   |
-|   length  | number |    yes   |      5000     |
+| Arguments |       Type      | Required |    Default    |
+| :-------: | :-------------: | :------: | :-----------: |
+|  message  | string \| table |    yes   | 'Placeholder' |
+|    type   |      string     |    yes   |   'primary'   |
+|   length  |      number     |    yes   |      5000     |
 
 {% hint style="info" %}
 Client example

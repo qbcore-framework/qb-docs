@@ -62,7 +62,11 @@ print(hasItem)
 
 ### QBCore.Functions.Notify
 
-* The core notification system that is used. Has three parameters to pass which are text, notification type, and how the length of notification. The notifications allow for a title and a caption or just a singular message. Text can be a string or a table (refer to the example below), the type must be a string and length must be a number. Current types: primary(default), success, error, police, ambulance - An unlimited amount of types can be made in qb-core/html/app.js
+| Arguments |       Type      | Required |    Default    |
+| :-------: | :-------------: | :------: | :-----------: |
+|  message  | string \| table |    yes   | 'Placeholder' |
+|    type   |      string     |    yes   |   'primary'   |
+|   length  |      number     |    yes   |      5000     |
 
 ```lua
 function QBCore.Functions.Notify(text, textype, length)

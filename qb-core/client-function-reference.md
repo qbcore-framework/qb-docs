@@ -191,7 +191,6 @@ QBCore.Functions.Progressbar('Changeme', 'What the player sees', 1500, false, tr
         -- This code runs if the progress bar completes successfully
     end, function()
         -- This code runs if the progress bar gets cancelled
-    end)
 end)
 ```
 

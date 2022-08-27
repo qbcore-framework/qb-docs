@@ -109,7 +109,7 @@ local staff = { -- our table we will loop through to get button values
 RegisterCommand('qbmenutable', function()
     local staffList = {}
     staffList[#staffList + 1] = { -- create non-clickable header button
-        isHeader = true,
+        isMenuHeader = true,
         header = 'QBCore Test Loop Menu',
         icon = 'fa-solid fa-infinity'
     }

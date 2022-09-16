@@ -46,7 +46,7 @@ Our contract resource is a must for any FiveM Server. Allowing players the abili
 
 This chat theme stands out from the others because it includes a very clean design and an export to convert other commands/systems to use its structure with simplicity. It comes with many configurable options, allowing your players to use diversified chat commands, which allows them to communicate in confidence with each other.
 
-![](<.gitbook/assets/Untitled-1 (1).png>)
+![](.gitbook/assets/Untitled-1.png)
 
 {% embed url="https://okok.tebex.io/package/4967999" %}
 

@@ -11,7 +11,6 @@
 * [✍ JetBrains](project-sponsors/jetbrains.md)
 * [📚 GitBook](project-sponsors/gitbook.md)
 * [🗃 Pleb Masters: Forge](project-sponsors/pleb-masters-forge.md)
-* [🤖 cDev](project-sponsors/cdev.md)
 * [🎥 KakarotDevs](project-sponsors/kakarotdevs.md)
 
 ## Guides
@@ -70,7 +69,7 @@
 * [🔃 qb-loading](qbcore-resources/qb-loading.md)
 * [🪛 qb-lockpick](qbcore-resources/qb-lockpick.md)
 * [👔 qb-management](qbcore-resources/qb-management.md)
-* [🧑🔧 qb-mechanicjob](qbcore-resources/qb-mechanicjob.md)
+* [🧑🔧 🧑🔧 qb-mechanicjob](qbcore-resources/qb-mechanicjob.md)
 * [↖ qb-menu](qbcore-resources/qb-menu.md)
 * [🙋 qb-multicharacter](qbcore-resources/qb-multicharacter.md)
 * [📰 qb-newsjob](qbcore-resources/qb-newsjob.md)

@@ -3,6 +3,7 @@
 * [👋 Introduction](README.md)
 * [📀 Rent a FiveM Server](https://zap-hosting.com/qbcore)
 * [🚨 Sonoran Software](sonoran-software.md)
+* [🦝 Gabz Mapping](gabz-mapping.md)
 * [⚒ Codesign scripts](codesign-scripts.md)
 * [🆗 okok Scripts](okok-scripts.md)
 

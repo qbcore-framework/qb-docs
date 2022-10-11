@@ -2,7 +2,6 @@
 
 * [👋 Introduction](README.md)
 * [📀 Rent a FiveM Server](https://zap-hosting.com/qbcore)
-* [🦝 Gabz Mapping](gabz-mapping.md)
 * [🆗 okok Scripts](okok-scripts.md)
 
 ## Project Sponsors

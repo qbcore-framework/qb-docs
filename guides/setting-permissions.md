@@ -119,7 +119,7 @@ In qb-core/config.lua find **`QBConfig.Server.Permissions = {'god', 'admin', 'mo
 
 Here you can add more groups, lets say I wanted to make one for police I would have `QBConfig.Server.Permissions = {'god', 'admin', 'mod', 'leo'}`
 
-Then in my server.cfg I would but below admins like so `add_principal identifier.license:xxxxxxx qbcore.leo #players name`
+Then in my server.cfg I would place this below admins like so `add_principal identifier.license:xxxxxxx qbcore.leo #players name`
 
 Making a command for only leo can access would look like
 

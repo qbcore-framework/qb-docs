@@ -71,7 +71,7 @@ Then click "Run Recipe"
 ![After you let the recipe install you will be greeted with a screen like this.](https://i.imgur.com/MZyiPmg.png)
 
 {% hint style="danger" %}
-If you did not get the above message and got an error message, please use the official [QBCore Discord](https://discord.gg/qbcore) for support
+If you did not get the above message and got an error message, please use the official [QBCore Discord](https://discord.gg/qbcore) and post in [fivem-support](https://discord.com/channels/831626422232678481/1006299568314527895)
 {% endhint %}
 
 {% hint style="warning" %}

@@ -16,7 +16,7 @@ Start XAMPP and start the first two boxes, "Apache" and "MySQL"
 
 ![Marking the checkbox will install the corresponding service on your machine](../.gitbook/assets/zFwKbxO.png)
 
-If you want to auto start HeidiSQL and XAMPP when you sign into windows. Launch XAMPP in administrator, Click the config box on the top right of the window. Then where it says "Autostart of modules Click Apache and MySQL, Then save the config on the bottom right. Thats all you have to do! Now you dont have to worry about launching XAMPP to start your database. 
+If you want to start HeidiSQL and XAMPP when windows starts up. Launch XAMPP in administrator, Click the config box on the top right of the window. Then where it says "Autostart of modules Click Apache and MySQL, Then save the config on the bottom right. Thats all you have to do! Now you dont have to worry about launching XAMPP to start your database. 
 
 ## HeidiSQL
 

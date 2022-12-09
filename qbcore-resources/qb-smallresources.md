@@ -1,5 +1,5 @@
 ---
-description: Woah, that's big
+description: Resource for handling **alot** of misc stuff.
 ---
 
 # 📚 qb-smallresources
@@ -8,6 +8,7 @@ description: Woah, that's big
 
 * This resource handles many small tasks for the framework
 * Discord Logs
+* Timed Jobs
 * Consumable foods/beverages/drinks/drugs (sandwich, water\_bottle, tosti, beer, vodka etc.)
 * Removal of GTA's default weapons drops
 * Drug effects
@@ -151,6 +152,40 @@ ConsumeablesAlcohol = { -- how much thirst is relieved on use
     ["vodka"] = math.random(20, 40),
 }
 ```
+
+## Timed Jobs / Cron
+
+{% hint style="info" %}
+Timed jobs are used to execute code at a certain time every day. For example executing function x every monday when the clock is 08:20 AM etc.
+{% endhint %}
+
+### Usage (Server Exports):
+
+- CreateTimedJob(hour: number, min: number, callback: function)
+    > Used for registering the actual timed job. Returns the index of the timed job which can be used to force run or stop the timed job.<br>
+    > **Example:**
+    > ```lua
+    > -- `idx` becomes the index of the timed job.
+    >local idx = exports["qb-smallresources"]:CreateTimedJob(8, 20, function(day, hour, min)
+    >	 if day == 1 then -- check if its monday
+    >        print("Its currently 08:20 AM on a monday")
+    >    end
+    >end)
+    > ```
+    
+- ForceRunTimedJob(idx: number)
+    > Used to force run a timed job, even if the time isnt correct. Does not bypass local checks in the actual callback though.<br>
+    > **Example:**
+    > ```lua
+    > exports["qb-smallresources"]:ForceRunTimedJob(2)
+    > ```
+
+- StopTimedJob(idx: number)
+    > Stops the timed job forever (unless registered again).<br>
+    > **Example:**
+    > ```lua
+    > exports["qb-smallresources"]:StopTimedJob(3)
+    > ```
 
 ## Logs
 

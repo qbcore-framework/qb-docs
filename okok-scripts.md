@@ -6,7 +6,7 @@
 
 We are a duo team of developers who specialize in the creation and distribution of **affordable**, yet **high-end quality** FiveM resources.
 
-With over 6000 members in our discord server and thousands of satisfied customers, our primary goal is listening to the feedback of our community, taking in their suggestions and creating scripts which will reach the vast majority audience within FiveM.
+With over 9000 members in our discord server and thousands of satisfied customers, our primary goal is listening to the feedback of our community, taking in their suggestions and creating scripts which will reach the vast majority audience within FiveM.
 
 ## Our Resources
 
@@ -14,9 +14,19 @@ We have a large selection of resources which are guaranteed to meet the needs of
 
 We also have a great support team which is prepared to assist you in the basics of installing the scripts within your server, help you fix any issues and answer any questions you may have, ensuring you're well taken care of.
 
+## okokGarage
+
+Our newest resource is an all-in-one Garage, Impound & Vehicle Keys system that offers a wide range of features for all your server needs. As well as, the aesthetically pleasing UI Design for both the Garage Menu & Viewing Mode. Some of the features include creating Public, Society or Private Garages by managing a garage business, setting your favorite vehicles, the ability to share access to your garage or a specific vehicle with your friends, give extra sets of keys, transfer vehicles and more. The "View" option includes many informative details and options related to your vehicle as well as the ability to repair.
+
+<figure><img src=".gitbook/assets/view menu (1).jpeg" alt=""><figcaption><p>View/Inspect Vehicle menu</p></figcaption></figure>
+
+<figure><img src=".gitbook/assets/garagemenu.png" alt=""><figcaption><p>Garage menu</p></figcaption></figure>
+
+{% embed url="https://okok.tebex.io/package/5411267" %}
+
 ## okokVehicleShop
 
-Our newest release, offers a very modernized UI, allowing your players to browse a catalog of configured vehicle stock. Includes the choice of interactive missions to obtain the vehicles, and the options to be player owned or run independently, with as many shops as you like. It comes with many configurable options, allowing players the freedom to use the Vehicle Shop as they like. Being able to lock the shop to a job, or to a license as well as many more features.
+Our Vehicle Shop offers a very modernized UI, allowing your players to browse a catalog of configured vehicle stock. Includes the choice of interactive missions to obtain the vehicles, and the options to be player owned or run independently, with as many shops as you like. It comes with many configurable options, allowing players the freedom to use the Vehicle Shop as they like. Being able to lock the shop to a job, or to a license as well as many more features.
 
 ![Dealership customer menu](https://dunb17ur4ymx4.cloudfront.net/wysiwyg/1046358/b14df613835b84cc10fdb9c210441b8a4fead434.png)
 
@@ -33,6 +43,18 @@ Our banking system allows you to choose if you would like to use the okokBanking
 ![ATM menu](.gitbook/assets/cea84fa7381f375232c1b2c917b1fae0121a7621.png)
 
 {% embed url="https://okok.tebex.io/package/5126430" %}
+
+## okokBilling
+
+Recently upgraded to V2, a full rework to our resource. It now features a beautiful dark theme with our original "okok" UI Design theme. A very simple billing/fining system, including Personal/Society invoices for all your personal or business needs. Conveninece options such as Pay All Invoices, Pay References, Inspect Player, VAT System, Autopay and more.
+
+<figure><img src=".gitbook/assets/billingmenu.png" alt=""><figcaption><p>Selection menu</p></figcaption></figure>
+
+<figure><img src=".gitbook/assets/myinvoices.png" alt=""><figcaption><p>Personal Invoices menu</p></figcaption></figure>
+
+<figure><img src=".gitbook/assets/createinvoice.png" alt=""><figcaption><p>Create Invoice menu</p></figcaption></figure>
+
+{% embed url="https://okok.tebex.io/package/5246435" %}
 
 ## okokContract
 

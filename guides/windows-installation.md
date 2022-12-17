@@ -14,7 +14,7 @@ Install [XAMPP ](https://www.apachefriends.org/download.html)and [HeidiSQL.](htt
 
 Start XAMPP and start the first two boxes, "Apache" and "MySQL"
 
-![Marking the checkbox will install the corresponding service on your machine](../.gitbook/assets/zFwKbxO.png)
+![Marking the checkbox will install the corresponding service on your machine](<../.gitbook/assets/zFwKbxO (1).png>)
 
 If you want to auto start HeidiSQL and XAMPP when Windows starts. Launch XAMPP in administrator, Click the config box on the top right of the window. You should see a section called "Autostart of modules". In that section, toggle Apache and MySQL, then click save the config on the bottom right. Thats all you have to do!
 

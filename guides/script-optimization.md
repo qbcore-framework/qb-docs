@@ -27,7 +27,7 @@ end
 function someFunction()
     local table = {}
     table.insert(table, {}) -- Don't use this
-    table[table+1] = {} -- Use this
+    table[#table+1] = {} -- Use this
 end
 ```
 

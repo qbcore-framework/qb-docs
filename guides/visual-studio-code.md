@@ -30,10 +30,6 @@ Make sure you check the "Open with code" boxes!
 
 ![](../.gitbook/assets/fivemnatives.png)
 
-* [QBCore code snippets](https://marketplace.visualstudio.com/items?itemName=ihyajb.qbcore-code-snippets)
-
-![](../.gitbook/assets/qbcoresnippets.png)
-
 * [Material icon theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme) (cosmetic only)
 
 ![](../.gitbook/assets/icontheme.png)

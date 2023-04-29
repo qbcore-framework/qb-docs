@@ -197,6 +197,48 @@ QBCore.Functions.CreateCallback('callbackName', function(source, cb)
 end)
 ```
 
+### QBCore.Functions.AddItem
+
+* Registers an item
+
+```lua
+
+function QBCore.Functions.AddItem(itemName, item)
+    if type(itemName) ~= "string" then
+        return false, "invalid_item_name"
+    end
+
+    if QBCore.Shared.Items[itemName] then
+        return false, "item_exists"
+    end
+
+    QBCore.Shared.Items[itemName] = item
+
+    TriggerClientEvent('QBCore:Client:OnSharedUpdate', -1, 'Items', itemName, item)
+    TriggerEvent('QBCore:Server:UpdateObject')
+    return true, "success"
+end
+
+-- Example
+
+local item = {
+    ['name'] = 'demo_item', -- Actual item name for spawning/giving/removing
+    ['label'] = 'Demo Item', -- Label of item that is shown in inventory slot
+    ['weight'] = 5000, -- How much the items weighs (in grams > 5kg)
+    ['type'] = 'item', -- What type the item is (ex: item, weapon)
+    ['image'] = 'demo_item.png', -- This item image that is found in qb-inventory/html/images (should be same name as ['name'] from above)
+    ['unique'] = true, -- Is the item unique (true|false) - Cannot be stacked & accepts item info to be assigned
+    ['useable'] = true, -- Is the item useable (true|false) - Must still be registered as useable
+    ['shouldClose'] = false, -- Should the item close the inventory on use (true|false)
+    ['combinable'] = nil, -- Is the item able to be combined with another? (nil|table) see shared > items for more info
+    ['description'] = 'A item used as a example' -- Description of time in inventory
+}
+
+QBCore.Functions.AddItem(item.name, item);
+
+```
+
+
 ### QBCore.Functions.CreateUseableItem
 
 * Register an item as usable in the core

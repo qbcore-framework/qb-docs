@@ -20,7 +20,11 @@ The easiest way to get started with a QBCore server is to use the txAdmin recipe
 Rent a [txAdmin](https://zap-hosting.com/qbcore6) server today!
 {% endhint %}
 
-![](<.gitbook/assets/image (4) (1).png>)
+<div align="left">
+
+<img src=".gitbook/assets/image (4) (1).png" alt="">
+
+</div>
 
 ## License
 

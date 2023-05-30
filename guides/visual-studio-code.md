@@ -26,9 +26,9 @@ Make sure you check the "Open with code" boxes!
 
 ![](../.gitbook/assets/prettier.png)
 
-* [FiveM natives](https://marketplace.visualstudio.com/items?itemName=fivem-vscode.fivem-vscode)
+* [FiveM natives](https://marketplace.visualstudio.com/items?itemName=overextended.cfxlua-vscode)
 
-![](../.gitbook/assets/fivemnatives.png)
+<figure><img src="../.gitbook/assets/cfxlua (1).png" alt=""><figcaption></figcaption></figure>
 
 * [Material icon theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme) (cosmetic only)
 
@@ -37,6 +37,10 @@ Make sure you check the "Open with code" boxes!
 * [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme) (cosmetic only)
 
 ![](../.gitbook/assets/darkonepro.png)
+
+* [QBCore Snippets](https://marketplace.visualstudio.com/items?itemName=JericoFX.qb-core-snippets)
+
+<figure><img src="../.gitbook/assets/qb-snippets.png" alt=""><figcaption></figcaption></figure>
 
 ## Fonts
 

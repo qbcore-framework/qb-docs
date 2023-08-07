@@ -144,7 +144,7 @@ function QBCore.Player.CheckPlayerData(source, PlayerData)
 end
 ```
 
-***
+
 
 ### QBCore.Player.Logout
 
@@ -160,7 +160,7 @@ function QBCore.Player.Logout(source)
 end
 ```
 
-***
+
 
 ### QBCore.Player.CreatePlayer
 
@@ -484,7 +484,7 @@ function QBCore.Player.CreatePlayer(PlayerData)
 end
 ```
 
-***
+
 
 ### QBCore.Player.Save
 
@@ -517,7 +517,7 @@ function QBCore.Player.Save(source)
 end
 ```
 
-***
+
 
 ### QBCore.Player.DeleteCharacter
 

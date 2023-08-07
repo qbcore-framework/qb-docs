@@ -86,7 +86,7 @@ local function someFunction(param1, param2, param3)
 end
 ```
 
-***
+
 
 ### Native Usage
 
@@ -116,7 +116,7 @@ local function someFunction()
 end
 ```
 
-***
+
 
 ### Loops
 
@@ -185,14 +185,14 @@ local function exampleJobLoop()
 end
 ```
 
-***
+
 
 ### Security
 
 * A surplus amount of security in a code is not a bad thing. Don't be afraid to add in multiple if checks or create random variables to pass through your events
 * Never do any type of transaction with the player regarding money or items on the client side of a resource
 
-***
+
 
 ### Event Handlers
 

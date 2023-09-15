@@ -3,7 +3,7 @@
 * [👋 Introduction](README.md)
 * [📀 Rent a FiveM Server](https://zap-hosting.com/qbcore)
 * [🆗 okok Scripts](okok-scripts.md)
-* [Sonoran CMS](sonoran-cms.md)
+* [QB Management Panel](qb-management-panel.md)
 
 ## Project Sponsors
 

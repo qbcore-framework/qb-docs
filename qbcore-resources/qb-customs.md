@@ -4,6 +4,11 @@ description: Customize your ride!
 
 # 🎨 qb-customs
 
+{% hint style="warning" %}
+qb-customs is currently being reworked!
+The team at Warden had made us aware of some questionable code in customs and a previous version of vehicle shop. We've always promoted authenticity and originality here so our apologies for the mistake.
+{% endhint %}
+
 ## Introduction
 
 * Handles all vehicle customization and can be locked to a job or open to all players

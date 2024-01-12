@@ -2,8 +2,6 @@
 
 * [👋 Introduction](README.md)
 * [📀 Rent a FiveM Server](https://zap-hosting.com/qbcore)
-* [🆗 okok Scripts](okok-scripts.md)
-* [QB Management Panel](qb-management-panel.md)
 
 ## Project Sponsors
 

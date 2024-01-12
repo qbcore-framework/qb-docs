@@ -8,7 +8,7 @@ description: Powering up on Twitch and YouTube!
 
 ### About Me
 
-Hey! I'm Josh, aka "Kakarot", and I am the project manager of QBCore. I oversee all staff and development related concerns on the framework as well as ensure that we are making reliable forward progression! I'm 29 years old, a father and husband. I work full time but enjoy my week nights developing on FiveM and interacting with community members! One of my biggest passions is teaching others so this platform allows me to do that!
+Hey! I'm Josh, aka "Kakarot", and I am the project manager of QBCore. I oversee all staff and development related concerns on the framework as well as ensure that we are making reliable forward progression! I'm 30 years old and a father of two. I work full time but enjoy my week nights developing on FiveM and interacting with community members! One of my biggest passions is teaching others so this platform allows me to do that!
 
 ### What is KakarotDevs?
 
@@ -18,7 +18,7 @@ Some of our community members learn better by being able to visually see code wr
 
 The times sometime vary but typically always within this block
 
-* Monday-Friday 8pm-1am (Central Standard Time)
+* Monday-Friday 2pm-10pm (Central Standard Time)
 
 ### Twitch
 
@@ -32,3 +32,7 @@ The times sometime vary but typically always within this block
 * Tutorials, walkthroughs, insights & more
 
 {% embed url="https://www.youtube.com/c/QBCoreFramework" %}
+
+## Kick
+
+{% embed url="https://www.kick.com/qbcore" %}

@@ -120,7 +120,8 @@ Config.SellLocations = {
 
 ## Items
 
-* diving\_gear - Equips/unequips the diving suit
+* diving\_gear - Diving suit
+* diving\_fill - Oxygen bottle
 
 ## Commands
 

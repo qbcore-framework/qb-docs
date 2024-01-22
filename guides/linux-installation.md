@@ -75,9 +75,8 @@ FLUSH PRIVILEGES;
 'user1', localhost and 'password1' variables are all expected to be changed. You can change anything in the 'user1' and 'password1' fields to your desired values as that's what you'll use while logging in.
 
 \
-Localhost is a bit tricky. Since Linux does not natively feature a Desktop Environment, you will most likely access the database with the user remotely. To do so, instead of localhost, enter a % (A % means any host) so it looks as **'user1'@%**\
-\*\*\*\*\
-\*\*\*\*We will be covering how to connect and what ports to open below.
+Localhost is a bit tricky. Since Linux does not natively feature a Desktop Environment, you will most likely access the database with the user remotely. To do so, instead of localhost, enter a % (A % means any host) so it looks as **'user1'@'%'**
+We will be covering how to connect and what ports to open below.
 {% endhint %}
 
 ### Allowing remote access (DB)

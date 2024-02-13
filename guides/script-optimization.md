@@ -110,7 +110,7 @@ local function someFunction()
     local dist = GetDistanceBetweenCoords(pCoords, coords, true) -- Don't use this
     local dist = #(pCoords - coords) -- Use this
     
-    if dist > 5 then
+    if dist < 5 then
         print('Im within 5 distance units of the coords!')
     end
 end

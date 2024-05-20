@@ -4,6 +4,55 @@ description: A list of all the commands and their respective resource
 
 # ❗ Commands
 
+## QBCore.Commands.Add
+
+This function allows you to register a command with a specified user level
+
+```lua
+QBCore.Commands.Add(name, help, arguments, argsrequired, callback, permission, ...)
+```
+
+* name: `string`
+* help: `string`
+* arguments: `table`
+* argsrequired: `boolean`
+* callback: `function`
+* permission: `string`
+
+Example:
+
+```lua
+local arguments = {
+    { name = 'arg 1', help = 'This will give helpful hints on what arg is for' },
+    { name = 'arg 2', help = 'This will give helpful hints on what arg is for' }
+}
+
+local argsRequired = true -- if this is true the command won't work without args entered
+
+QBCore.Commands.Add('test', 'Trigger a test command', arguments, argsRequired, function(source)
+    print('Congrats, you made a test command that anyone can trigger!')
+end, 'user')
+```
+
+## QBCore.Commands.Refresh
+
+This function will trigger a refresh of all commands suggestions. This is helpful for when setting permissions to a higher level, it will refresh the suggestions list so the player can now see the new commands they have access to!
+
+```lua
+QBCore.Commands.Refresh(source)
+```
+
+* source: `number`
+
+Example:
+
+```lua
+RegisterCommand('refreshCommands', function()
+    QBCore.Commands.Refresh(source)
+    print('You have refreshed all command suggestions for yourself')
+end, true)
+```
+
 ### AdminMenu
 
 <details>

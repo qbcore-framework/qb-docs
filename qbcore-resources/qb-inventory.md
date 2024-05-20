@@ -240,7 +240,7 @@ exports['qb-inventory']:CreateShop(shopData)
 
 ```lua
 local items = {
-    { name = 'sandwich', amount = 10 }
+    { name = 'sandwich', amount = 10, price = 5 }
 }
 
 RegisterCommand('createShop', function(source)

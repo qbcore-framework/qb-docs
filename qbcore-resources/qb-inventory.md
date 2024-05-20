@@ -631,3 +631,38 @@ RegisterCommand('getItemsByName', function(source, args)
     end
 end, true)
 ```
+
+## GetItemCount
+
+```lua
+exports['qb-inventory']:GetItemCount(source, items)
+```
+
+* source: `number`
+* items: `string | table`
+* <mark style="color:yellow;">returns</mark>: `number`
+
+Example:
+
+```lua
+RegisterCommand('getItemCount', function(source, args)
+    local itemName = args[1]
+    if not itemName then return end
+    local itemCount = exports['qb-inventory']:GetItemCount(source, itemName)
+    if itemCount and itemCount > 0 then
+        print('You have '..itemCount..' of item: '..itemName)
+    else
+        print('No items found with name '..itemName)
+    end
+end, true)
+
+RegisterCommand('getItemCounts', function(source)
+    local itemNames = {"apple", "banana", "orange"}
+    local itemCount = exports['qb-inventory']:GetItemCount(source, itemNames)
+    if itemCount and itemCount > 0 then
+        print('You have '..itemCount..' of the items: '..table.concat(itemNames, ", "))
+    else
+        print('No items found with the names: '..table.concat(itemNames, ", "))
+    end
+end, true)
+```

@@ -181,7 +181,7 @@ exports['qb-banking']:CreateBankStatement(playerId, account, amount, reason, sta
 * returns: `boolean`
 
 ```lua
-RegisterCommand('getBalance', function(source)
+RegisterCommand('createBankStatement', function(source)
     local playerId = source
     local account = 'My Shared Account'
     local amount = 5000

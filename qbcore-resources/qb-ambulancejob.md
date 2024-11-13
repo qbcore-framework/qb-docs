@@ -83,7 +83,7 @@ Calling this event will modify the players isdead metadata to the passed bool (t
 RegisterNetEvent('hospital:server:SetDeathStatus', function(isDead)
 
 -- Example
-TriggerServentEvent('hospital:server:SetDeathStatus', true)
+TriggerServerEvent('hospital:server:SetDeathStatus', true)
 ```
 
 Calling this event will modify the players inlaststand metadata to the passed bool (true/false)
@@ -93,7 +93,7 @@ Calling this event will modify the players inlaststand metadata to the passed bo
 RegisterNetEvent('hospital:server:SetLaststandStatus', function(bool)
 
 -- Example
-TriggerServentEvent('hospital:server:SetLaststandStatus', true)
+TriggerServerEvent('hospital:server:SetLaststandStatus', true)
 ```
 
 Calling this event will send a notification to all players with the ambulance job title

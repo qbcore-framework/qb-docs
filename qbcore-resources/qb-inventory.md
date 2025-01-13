@@ -501,6 +501,47 @@ RegisterCommand('hasMultipleItemsWithAmounts', function(source)
     end
 end, true)
 ```
+## GetFreeWeight
+Returns the available space in weight of a specified player source's inventory.
+
+```lua
+exports['qb-inventory']:GetFreeWeight(source)
+```
+
+* source: `number`
+* <mark style="color:yellow;">returns</mark>: `number`
+
+Example:
+
+```lua
+RegisterCommand('getFreeWeight', function(source)
+    local freeWeight = exports['qb-inventory']:GetFreeWeight(source)
+    print('Free Weight: ' .. freeWeight)
+end, true)
+```
+## GetSlots
+Returns the occupied and empty slots of a specified identifier's inventory. (Player source or id of inventory / drop)
+
+```lua
+exports['qb-inventory']:GetSlots(identifier)
+```
+
+* identifier: `number | string`
+* <mark style="color:yellow;">returns</mark>: `tuple`
+  - `number`: Slots used.
+  - `number`: Slots free.
+
+Example:
+
+```lua
+RegisterCommand('getSlots', function(source, args)
+    local invId = args[1]
+    if not invId then return end
+
+    local slotsUsed, slotsFree = exports['qb-inventory']:GetSlots(invId)
+    print('Slots Used: ' .. slotsUsed, 'Slots Free: ' .. slotsFree)
+end, true)
+```
 
 ## GetSlotsByItem
 

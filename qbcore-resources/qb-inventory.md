@@ -527,9 +527,7 @@ exports['qb-inventory']:GetSlots(identifier)
 ```
 
 * identifier: `number | string`
-* <mark style="color:yellow;">returns</mark>: `tuple`
-  - `number`: Slots used.
-  - `number`: Slots free.
+* <mark style="color:yellow;">returns</mark>: slotsUsed: `number`, slotsFree: `number`
 
 Example:
 

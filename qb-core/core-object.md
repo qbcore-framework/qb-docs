@@ -1,6 +1,6 @@
 ---
-description: Let's dive into the core object of the qb-core resource!
 icon: circle-info
+description: Let's dive into the core object of the qb-core resource!
 ---
 
 # Core Object
@@ -27,25 +27,17 @@ As of `qb-core` version 1.3.0 (check your fxmanifest.lua) you can decide what yo
 
 ```lua
 -- I only need access to the functions of the core object!
+local QBCore = exports['qb-core']:GetCoreObject({'Functions'})
 
-local QBCore = {
-    Functions = exports['qb-core']:GetCoreObject({'Functions'})
-}
+-- Now the below is available to use!
+-- QBCore.Functions
 
 -- I need access to the functions and the shared!
+local QBCore = exports['qb-core']:GetCoreObject({'Functions', 'Shared'})
 
-local QBCore = {
-    Functions = exports['qb-core']:GetCoreObject({'Functions'}),
-    Shared = exports['qb-core']:GetCoreObject({'Shared'})
-}
-
--- alternatively (to reduce export calls)
-
-local core = exports['qb-core']:GetCoreObject({'Functions', 'Shared'})
-local QBCore = {
-    Functions = core.Functions,
-    Shared = core.Shared
-}
+-- Now the below are available to use!
+-- QBCore.Functions
+-- QBCore.Shared
 ```
 
 ### Exported Functions

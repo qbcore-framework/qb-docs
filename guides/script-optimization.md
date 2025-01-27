@@ -6,7 +6,9 @@ description: Learn how to write optimized code!
 
 ### General Practices
 
-* Localize as many functions and variables as possible. Lua can read them faster
+**Localize Functions and Variables**
+
+* Lua accesses local variables and functions faster than global ones. Always use `local` when declaring variables or functions unless explicitly required to be global
 
 ```lua
 myVariable = false -- Don't use this
@@ -21,7 +23,9 @@ local function someFunction() -- Use this
 end
 ```
 
-* Instead of using `table.insert` use `tableName[#tableName+1] = data`
+**Use Table Indexing Instead of `table.insert`**
+
+* `table.insert` adds slight overhead; directly assigning a value is more efficient
 
 ```lua
 function someFunction()
@@ -31,7 +35,9 @@ function someFunction()
 end
 ```
 
-* Instead of using `if something ~= nil` use `if something then`. This method checks for nil and/or false at the same time
+**Simplify Conditional Checks**
+
+* Use `if something then` instead of `if something ~= nil` to check for both `nil` and `false`
 
 ```lua
 function someFunction()
@@ -47,7 +53,9 @@ function someFunction()
 end
 ```
 
-* If you are creating a function or an event, make it so that it can be used in different scenarios with different variables. Keep it universal basically
+**Keep Functions Universal**
+
+* Write functions and events that can handle multiple scenarios by passing parameters. This increases code reusability
 
 ```lua
 local function someFunction(param1, param2, param3)
@@ -73,7 +81,9 @@ RegisterNetEvent('someEvent', function(param1, param2, param3)
 end)
 ```
 
-* When writing code use what's known as "short returns" for failed conditions
+**Short Returns**
+
+* Use **short returns** to exit a function early if conditions aren't met. This keeps code cleaner and avoids unnecessary nested `if` blocks
 
 ```lua
 local function someFunction(param1, param2, param3)
@@ -84,6 +94,160 @@ local function someFunction(param1, param2, param3)
     if not param3 then return end
     print('I met condition number three!')
 end
+```
+
+**Avoid Re-Creating Tables or Variables Repeatedly**
+
+* Instead of creating tables or variables repeatedly inside loops or frequently called functions, initialize them once and reuse
+
+```lua
+local reusableTable = {}
+
+local function someFunction()
+    for i = 1, 10 do
+        reusableTable[i] = i -- Reuse the same table instead of creating a new one
+    end
+end
+```
+
+**Use `nil` to Free Up Memory**
+
+* Assign unused variables to `nil` to let Lua’s garbage collector free the memory
+
+```lua
+local largeData = {1, 2, 3, 4}
+-- Process data...
+largeData = nil -- Free up memory when done
+```
+
+**Avoid Hardcoding**
+
+* Centralize configurable values (like coordinates, item names, or payment amounts) into a `config.lua` file for easier management
+
+**Example `config.lua`**:
+
+```lua
+Config = {
+    Zones = {
+        PoliceStation = vector3(441.1, -981.1, 30.7),
+        Hospital = vector3(1151.21, -1529.62, 34.84)
+    },
+    Payments = {
+        Police = 150,
+        EMS = 120
+    }
+}
+```
+
+**Logging and Debugging**
+
+* Use a debug mode toggle in your scripts to enable or disable logs dynamically without removing them. You could even add it as an option in your `config.lua` from above!
+
+```lua
+local DEBUG = true
+
+local function debugLog(message)
+    if DEBUG then
+        print(message)
+    end
+end
+
+debugLog('This is a debug message!')
+```
+
+**Track Performance**
+
+* Measure execution time for performance-critical sections using `os.clock()` or FiveM natives
+
+```lua
+local start = os.clock()
+-- Code to measure
+print("Execution time:", os.clock() - start)
+```
+
+```lua
+local startTime = GetGameTimer()
+-- Simulate a delay
+Wait(1000)
+local endTime = GetGameTimer()
+print("Execution time (ms):", endTime - startTime) -- Output: 1000 (approx)
+```
+
+**Avoid Overusing Network Events**
+
+* Use shared state (e.g., via `state bags` or `entity states`) when frequent data synchronization is needed, rather than spamming `TriggerEvent` or `TriggerServerEvent`
+
+```lua
+-- Set state
+Entity(playerPed).state:set('exampleData', 123, true)
+
+-- Get state
+local data = Entity(playerPed).state.exampleData
+print(data) -- Outputs: 123
+```
+
+**Optimize Data Transmission**
+
+* Only send the data you need, not entire tables or large payloads
+
+```lua
+TriggerServerEvent('exampleEvent', { x = 100, y = 200 }) -- Only send necessary fields
+```
+
+***
+
+### Code Readability
+
+Comment Your Code
+
+* Include comments to explain logic, especially for complex or non-obvious sections
+
+```lua
+-- Check if the player is in range of the target zone
+if #(playerCoords - targetCoords) < 10 then
+    print('Player is in range')
+end
+```
+
+Organize Your Script
+
+* Structure your script logically, separating variables, functions, event handlers, and core logic into distinct sections
+
+```lua
+-- Variables
+local QBCore = exports['qb-core']:GetCoreObject()
+
+-- Functions
+local function calculateDistance(pos1, pos2)
+    return #(pos1 - pos2)
+end
+
+-- Events
+RegisterNetEvent('exampleEvent', function()
+    print('Event triggered!')
+end)
+
+-- Main Logic
+CreateThread(function()
+    print('Script started!')
+end)
+```
+
+**Folder Structure**
+
+* Break scripts into smaller, manageable pieces instead of writing everything in one file
+
+```
+my_script/
+├── client/
+│   ├── main.lua
+│   ├── utils.lua
+├── server/
+│   ├── main.lua
+│   ├── events.lua
+├── shared/
+│   ├── config.lua
+└── fxmanifest.lua
 ```
 
 ***
@@ -127,7 +291,7 @@ local function exampleLoop()
     CreateThread(function()
         while listen do
             print('running while loop only when needed')
-            Wait(1)
+            Wait(0)
         end
     end)
 end
@@ -155,18 +319,19 @@ end)
 ```lua
 CreateThread(function()
     while true do
-        Wait(1)
-        inRange = false
-        local pos = GetEntityCoords(PlayerPedId())
-        if #(pos - vector3(-829.11, 75.03, 52.73)) < 10.0 then
-            inRange = true
-            print('Im in range and the loop runs faster')
+        local sleep = 2500 -- Default wait time
+        local ped = PlayerPedId()
+        local pos = GetEntityCoords(ped)
+        local inRange = #(pos - vector3(-829.11, 75.03, 52.73)) < 10.0
+
+        if inRange then
+            sleep = 0 -- Reduce wait time if condition is met
+            print('I am in range!')
         else
-            print('Im not in range so i run only onces every 2.5 seconds')
+            print('I am out of range.')
         end
-        if not inRange then
-            Wait(2500)
-        end
+
+        Wait(sleep)
     end
 end)
 ```
@@ -179,7 +344,7 @@ local function exampleJobLoop()
     CreateThread(function()
         while job == 'police' do
             print('im a policeman!')
-            Wait(1)
+            Wait(0)
         end
     end)
 end

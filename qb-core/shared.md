@@ -387,6 +387,24 @@ QBShared.Vehicles = {
 }
 ```
 
+{% hint style="success" %}
+We automatically index the QBShared.Vehicles table with the model of the vehicle! So you can access it's properties via `QBCore.Shared.Vehicles[model]` We also automatically add the hash of the vehicle as a property of the vehicle so you can access that via `QBCore.Shared.Vehicles[model].hash`
+{% endhint %}
+
+Sometimes you only have the vehicle hash to work with so you can look it up following the example below!
+
+```lua
+local vehicleHash = 12345
+
+for model, vehicleData in pairs(QBCore.Shared.Vehicles) do
+    if vehicleData.hash == vehicleHash then
+        print('Found matching model: '..model)
+        print(json.encode(vehicleData))
+        break
+    end
+end
+```
+
 ### Weapons
 
 {% hint style="warning" %}

@@ -306,7 +306,7 @@ The `Gangs` table in **qb-core** defines all the gangs available on your server,
 
 ***
 
-**Job Object Layout**
+**Gang Object Layout**
 
 | Property | Type     | Description                                                                       |
 | -------- | -------- | --------------------------------------------------------------------------------- |

@@ -21,10 +21,11 @@
 
 ## QB-Core
 
+* [Core Object](qb-core/core-object.md)
+* [📊 Player Data](qb-core/player-data.md)
 * [📜 Shared](qb-core/shared.md)
 * [↗️ Shared Exports](qb-core/shared-exports.md)
 * [💬 DrawText](qb-core/drawtext.md)
-* [📊 Player Data](qb-core/player-data.md)
 * [🎮 Client Event Reference](qb-core/client-event-reference.md)
 * [🎮 Client Function Reference](qb-core/client-function-reference.md)
 * [🖥️ Server Event Reference](qb-core/server-event-reference.md)
@@ -65,7 +66,7 @@
 * [🔃 qb-loading](qbcore-resources/qb-loading.md)
 * [🪛 qb-lockpick](qbcore-resources/qb-lockpick.md)
 * [👔 qb-management](qbcore-resources/qb-management.md)
-* [🧑‍🔧  qb-mechanicjob](qbcore-resources/qb-mechanicjob.md)
+* [🧑‍🔧 qb-mechanicjob](qbcore-resources/qb-mechanicjob.md)
 * [↖️ qb-menu](qbcore-resources/qb-menu.md)
 * [🙋 qb-multicharacter](qbcore-resources/qb-multicharacter.md)
 * [📰 qb-newsjob](qbcore-resources/qb-newsjob.md)

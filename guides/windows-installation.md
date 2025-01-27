@@ -6,17 +6,9 @@ description: Installing a QBCore server step by step.
 
 ## Database Configuration
 
-{% hint style="warning" %}
-XAMPP is optional here, you can install [MariaDB](https://native-network.net/downloads/download/895/) by itself! Just remember to configure your [ports](https://zap-hosting.com/guides/docs/en/vserver\_windows\_port/)!
-{% endhint %}
+Install [MariaDB](https://mariadb.org/download)and [HeidiSQL](https://www.heidisql.com/download.php)
 
-Install [XAMPP ](https://www.apachefriends.org/download.html)and [HeidiSQL.](https://www.heidisql.com/download.php)
-
-Start XAMPP and start the first two boxes, "Apache" and "MySQL"
-
-![Marking the checkbox will install the corresponding service on your machine](../.gitbook/assets/zFwKbxO.png)
-
-If you want to auto start HeidiSQL and XAMPP when Windows starts. Launch XAMPP in administrator, Click the config box on the top right of the window. You should see a section called "Autostart of modules". In that section, toggle Apache and MySQL, then click save the config on the bottom right. Thats all you have to do!
+## MariaDB
 
 ## HeidiSQL
 

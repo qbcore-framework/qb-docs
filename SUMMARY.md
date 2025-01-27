@@ -1,7 +1,6 @@
 # Table of contents
 
 * [👋 Introduction](README.md)
-* [📀 Rent a FiveM Server](https://zap-hosting.com/qbcore)
 
 ## Project Sponsors
 

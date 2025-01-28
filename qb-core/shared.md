@@ -188,7 +188,6 @@ The `Items` table in **qb-core** defines all the items available in your server.
 | `unique`      | `boolean` | Whether the item is unique (`true`) or stackable (`false`).             |
 | `useable`     | `boolean` | Whether the item is usable. Must still be registered as a usable item.  |
 | `shouldClose` | `boolean` | Whether using the item closes the inventory (`true` or `false`).        |
-| `combinable`  | \`nil     | table\`                                                                 |
 | `description` | `string`  | A short description of the item shown in the inventory.                 |
 
 **Example: Basic Item Definition**
@@ -204,23 +203,7 @@ QBShared.Items = {
         unique = true, -- Is the item unique?
         useable = true, -- Can the item be used?
         shouldClose = false, -- Does it close the inventory on use?
-        combinable = nil, -- Is the item combinable? (nil means not combinable)
         description = 'A card containing all your information to identify yourself' -- Description
-    }
-}
-```
-
-**Example: Combinable Item Definition**
-
-```lua
-combinable = {
-    accept = {'snspistol_part_1'}, -- The item(s) it can be combined with
-    reward = 'snspistol_stage_1', -- The item received upon successful combination
-    anim = { -- Animation, progress bar text, and duration for the combine action
-        dict = 'anim@amb@business@weed@weed_inspecting_high_dry@', -- Animation dictionary
-        lib = 'weed_inspecting_high_base_inspector', -- Animation library
-        text = 'Attaching attachments', -- Progress bar text
-        timeOut = 15000, -- Duration (in milliseconds) of the combine animation
     }
 }
 ```
@@ -388,13 +371,23 @@ QBShared.Vehicles = {
 ```
 
 {% hint style="success" %}
-We automatically index the QBShared.Vehicles table with the model of the vehicle! So you can access it's properties via `QBCore.Shared.Vehicles[model]` We also automatically add the hash of the vehicle as a property of the vehicle so you can access that via `QBCore.Shared.Vehicles[model].hash`
+We automatically index the QBShared.Vehicles table with the model of the vehicle! So you can access it's properties via `QBCore.Shared.Vehicles[model]`&#x20;
+
+
+
+We also create a table called `QBShared.VehicleHashes` which stores the hash of the vehicle as the key!
 {% endhint %}
 
 Sometimes you only have the vehicle hash to work with so you can look it up following the example below!
 
 ```lua
 local vehicleHash = 12345
+
+local vehicleData = QBShared.VehicleHashes[vehicleHash]
+print('Found matching model: '..vehicleData.model)
+print(json.encode(vehicleData))
+
+-- alternatively
 
 for model, vehicleData in pairs(QBCore.Shared.Vehicles) do
     if vehicleData.hash == vehicleHash then

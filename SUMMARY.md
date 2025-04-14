@@ -44,7 +44,6 @@
 * [👕 qb-clothing](qbcore-resources/qb-clothing.md)
 * [🔄 qb-commandbinding](qbcore-resources/qb-commandbinding.md)
 * [🪙 qb-crypto](qbcore-resources/qb-crypto.md)
-* [🎨 qb-customs](qbcore-resources/qb-customs.md)
 * [🤿 qb-diving](qbcore-resources/qb-diving.md)
 * [🚪 qb-doorlock](qbcore-resources/qb-doorlock.md)
 * [💊 qb-drugs](qbcore-resources/qb-drugs.md)

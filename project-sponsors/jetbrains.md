@@ -12,7 +12,7 @@ JetBrains is a software company that specializes in creating developer tools. [H
 
 ![](../.gitbook/assets/jetbrains.png)
 
-## Documenation
+## Documentation
 
 {% embed url="https://www.jetbrains.com/help/" %}
 

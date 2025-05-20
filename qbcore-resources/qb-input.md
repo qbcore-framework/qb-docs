@@ -6,78 +6,103 @@ description: Enter stuff here
 
 ## Introduction
 
-* An interactive NUI menu that allows users to input various values and can be used in all sorts of ways
+The **QB Input** system provides an interactive Lua-based user input form integrated with a web-based interface
 
-## Preview
+### Features
 
-![](../.gitbook/assets/qbinput.png)
+* Multiple input types (text, password, number, radio, select, checkbox, color)
+* Customizable form submission
+* Dynamic styling through configuration
+* Easy-to-use Lua and JavaScript integration
 
-## Usage Example
+## ShowInput
 
-```etlua
+Displays an input form and returns user input data.
+
+* data: `table`
+  * header :_`string` (optional)_
+  * submitText:_`string` (optional)_
+  * inputs: `table`
+    * type: _`string`_
+    * name: _`string`_
+    * text: _`string`_
+    * default: _`any` (optional)_
+    * isRequired: _`boolean` (optional)_
+    * options: _`table` (optional)_
+      * text: _`string`_
+      * value: _`string`_
+      * checked: _`boolean` (optional)_
+
+```lua
 RegisterCommand('testinput', function()
     local dialog = exports['qb-input']:ShowInput({
         header = "Test",
         submitText = "Bill",
         inputs = {
             {
-                text = "Citizen ID (#)", -- text you want to be displayed as a place holder
-                name = "citizenid", -- name of the input should be unique otherwise it might override
-                type = "text", -- type of the input
-                isRequired = true, -- Optional [accepted values: true | false] but will submit the form if no value is inputted
-                -- default = "CID-1234", -- Default text option, this is optional
+                text = "Citizen ID (#)",
+                name = "citizenid",
+                type = "text",
+                isRequired = true,
+                default = "CID-1234",
             },
             {
-                text = "Secret Code (Give to Nobody)", -- text you want to be displayed as a place holder
-                name = "code", -- name of the input should be unique otherwise it might override
-                type = "password", -- type of the input
-                isRequired = true, -- Optional [accepted values: true | false] but will submit the form if no value is inputted
-                -- default = "password123", -- Default text option, this is optional
+                text = "Secret Code (Give to Nobody)",
+                name = "code",
+                type = "password",
+                isRequired = true,
+                default = "password123",
             },
             {
-                text = "Bill Price ($)", -- text you want to be displayed as a place holder
-                name = "billprice", -- name of the input should be unique otherwise it might override
-                type = "number", -- type of the input - number will not allow non-number characters in the field so only accepts 0-9
-                isRequired = false, -- Optional [accepted values: true | false] but will submit the form if no value is inputted
-                -- default = 1, -- Default number option, this is optional
+                text = "Bill Price ($)",
+                name = "billprice",
+                type = "number",
+                isRequired = false,
+                default = 1,
             },
             {
-                text = "Bill Type", -- text you want to be displayed as a input header
-                name = "billtype", -- name of the input should be unique otherwise it might override
-                type = "radio", -- type of the input - Radio is useful for "or" options e.g; billtype = Cash OR Bill OR bank
-                options = { -- The options (in this case for a radio) you want displayed, more than 6 is not recommended
-                    { value = "bill", text = "Bill" }, -- Options MUST include a value and a text option
-                    { value = "cash", text = "Cash" }, -- Options MUST include a value and a text option
-                    { value = "bank", text = "Bank" }  -- Options MUST include a value and a text option
+                text = "Bill Type",
+                name = "billtype",
+                type = "radio",
+                options = {
+                    { value = "bill", text = "Bill" },
+                    { value = "cash", text = "Cash" },
+                    { value = "bank", text = "Bank" }
                 },
-                -- default = "cash", -- Default radio option, must match a value from above, this is optional
+                default = "cash",
             },
             {
-                text = "Include Tax?", -- text you want to be displayed as a input header
-                name = "taxincl", -- name of the input should be unique otherwise it might override
-                type = "checkbox", -- type of the input - Check is useful for "AND" options e.g; taxincle = gst AND business AND othertax
-                options = { -- The options (in this case for a check) you want displayed, more than 6 is not recommended
-                    { value = "gst", text = "10% incl."}, -- Options MUST include a value and a text option
-                    { value = "business", text = "35% incl.", checked = true }, -- Options MUST include a value and a text option, checked = true is default value, optional
-                    { value = "othertax", text = "15% incl."}  -- Options MUST include a value and a text option
+                text = "Include Tax?",
+                name = "taxincl",
+                type = "checkbox",
+                options = {
+                    { value = "gst", text = "10% incl."},
+                    { value = "business", text = "35% incl.", checked = true },
+                    { value = "othertax", text = "15% incl."}
                 }
             },
             {
-                text = "Some Select", -- text you want to be displayed as a input header
-                name = "someselect", -- name of the input should be unique otherwise it might override
-                type = "select", -- type of the input - Select is useful for 3+ amount of "or" options e.g; someselect = none OR other OR other2 OR other3...etc
-                options = { -- Select drop down options, the first option will by default be selected
-                    { value = "none", text = "None" }, -- Options MUST include a value and a text option
-                    { value = "other", text = "Other"}, -- Options MUST include a value and a text option
-                    { value = "other2", text = "Other2" }, -- Options MUST include a value and a text option
-                    { value = "other3", text = "Other3" }, -- Options MUST include a value and a text option
-                    { value = "other4", text = "Other4" }, -- Options MUST include a value and a text option
-                    { value = "other5", text = "Other5" }, -- Options MUST include a value and a text option
-                    { value = "other6", text = "Other6" }, -- Options MUST include a value and a text option
+                text = "Some Select",
+                name = "someselect",
+                type = "select",
+                options = {
+                    { value = "none", text = "None" },
+                    { value = "other", text = "Other"},
+                    { value = "other2", text = "Other2" },
+                    { value = "other3", text = "Other3" },
+                    { value = "other4", text = "Other4" },
+                    { value = "other5", text = "Other5" },
+                    { value = "other6", text = "Other6" },
                 },
-                -- default = 'other3', -- Default select option, must match a value from above, this is optional
+                default = "other3",
+            },
+            {
+                text = "Favorite Color",
+                name = "favoritecolor",
+                type = "color",
+                default = "#ff0000",
             }
-        },
+        }
     })
 
     if dialog ~= nil then
@@ -86,4 +111,12 @@ RegisterCommand('testinput', function()
         end
     end
 end, false)
+```
+
+## CloseMenu
+
+Closes the menu
+
+```lua
+exports['qb-input']:CloseMenu()
 ```

@@ -2,13 +2,13 @@
 description: Always watching you...
 ---
 
-# 👁 qb-target
+# 👁️ qb-target
 
 ## Introduction
 
 qb-target is a targeting solution that allows interaction with any predefined entity, model, entity type or polyzone. While activated you can easily and safely replace markers and distance checking, instead of relying on intuitive design to improve player experiences and optimize interaction.
 
-## Features
+### Features
 
 * Maintains compatibility with bt-target while providing improved utility and performance
 * Optimized and improved raycasting function allows interaction with a wider range of entities
@@ -22,1532 +22,906 @@ qb-target is a targeting solution that allows interaction with any predefined en
 * Utilise the `canInteract` function for advanced checks to show or hide an option based on any trigger
 * Ped spawner to spawn peds and assign target options to them all in one place
 
-## These are Templates for all the functions in qb-target
+***
 
-### AddCircleZone
+## AddCircleZone
 
-#### Function Format
+Adds a circular zone that players can interact with
 
-```etlua
--- This is the function from how you would use it inside qb-target/client.lua
-AddCircleZone(name: string, center: vector3, radius: float, options: table, targetoptions: table)
+* **name**: `string`
+* **center**: `vector3`
+* **radius**: `float`
+* **options**: `table`
+  * **name**: `string`
+  * **debugPoly**: `boolean`&#x20;
+  * **useZ**: `boolean` (optional)
+* **targetoptions**: `table`
+  * **options**: `table`
+    * **num**: `number` (optional)
+    * **type**: `string`
+    * **event**: `string`
+    * **icon**: `string`
+    * **label**: `string`
+    * **targeticon**: `string` (optional)
+    * **item**: `string` (optional)
+    * **action**: `function` (optional)
+    * **canInteract**: `function` (optional)
+    * **job**: `string` or `table` (optional)
+    * **gang**: `string` or `table` (optional)
+    * **citizenid**: `string` or `table` (optional)
+    * **drawDistance**: `number` (optional)
+    * **drawColor**: `table` (optional)
+    * **successDrawColor**: `table` (optional)
+  * **distance**: `float`&#x20;
 
-options = {
-  name: string (UNIQUE),
-  debugPoly: boolean,
-}
-
-targetoptions = {
+```lua
+exports['qb-target']:AddCircleZone("police_armory", vector3(452.6, -980.0, 30.6), 1.5, {
+  name = "police_armory",
+  debugPoly = false,
+  useZ = true
+}, {
   options = {
     {
-      num: number,
-      type: string,
-      event: string,
-      icon: string,
-      label: string,
-      targeticon: string,
-      item: string,
-      action: function,
-      canInteract: function,
-      job: string or table,
-      gang: string or table,
-      drawDistance: number,
-      drawColor: table,
-      successDrawColor: table
+      num = 1,
+      type = "client",
+      event = "police:openArmory",
+      icon = "fas fa-archive",
+      label = "Open Armory",
+      targeticon = "fas fa-gun",
+      item = "police_badge",
+      action = function(entity)
+        if IsPedAPlayer(entity) then return false end
+        TriggerEvent("police:openArmoryMenu", entity)
+      end,
+      canInteract = function(entity, distance, data)
+        return not IsPedAPlayer(entity)
+      end,
+      job = { ["police"] = 0, ["sheriff"] = 1 },
+      gang = { ["thelostmc"] = 2 },
+      citizenid = { ["JFD98238"] = true, ["HJS29340"] = true },
+      drawDistance = 10.0,
+      drawColor = {255, 255, 255, 255},
+      successDrawColor = {0, 255, 0, 255}
     }
   },
-  distance: float
-}
+  distance = 2.5
+})
+
 ```
 
-#### Config option, this will go into the Config.CircleZones table
+***
 
-```etlua
-  ["index"] = { -- This can be a string or a number
-    name = "name", -- This is the name of the zone recognized by PolyZone, this has to be unique so it doesn't mess up with other zones
-    coords = vector3(x, y, z), -- These are the coords for the zone, this has to be a vector3 and the coords have to be a float value, fill in x, y and z with the coords
-    radius = 1.5, -- The radius of the circlezone calculated from the center of the zone, this has to be a float value
-    debugPoly = false, -- This is for enabling/disabling the drawing of the box, it accepts only a boolean value (true or false), when true it will draw the polyzone in green
-    options = { -- This is your options table, in this table all the options will be specified for the target to accept
-      { -- This is the first table with options, you can make as many options inside the options table as you want
-        num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-        type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-        event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-        icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-        label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-        targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-        item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-        action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-        end,
-        canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          return true
-        end,
-        job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-        gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-        citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-        drawDistance = 10.0, -- This is the distance for the sprite to draw if Config.DrawSprite is enabled, this is in GTA Units (OPTIONAL)
-        drawColor = {255, 255, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-        successDrawColor = {30, 144, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-      }
-    },
-    distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-  },
-```
+## AddBoxZone
 
-#### Export option, this will go into any client side resource file aside from qb-target's one
+Adds a rectangular zone that players can interact with
 
-```etlua
-exports['qb-target']:AddCircleZone("name", vector3(x, y, z), 1.5, { -- The name has to be unique, the coords a vector3 as shown and the 1.5 is the radius which has to be a float value
-  name = "name", -- This is the name of the zone recognized by PolyZone, this has to be unique so it doesn't mess up with other zones
-  debugPoly = false, -- This is for enabling/disabling the drawing of the box, it accepts only a boolean value (true or false), when true it will draw the polyzone in green
+* **name**: `string`
+* **center**: `vector3`
+* **length**: `float`
+* **width**: `float`
+* **options**: `table`
+  * **name**: `string`
+  * **heading**: `float`
+  * **debugPoly**: `boolean`
+  * **minZ**: `float`
+  * **maxZ**: `float`
+* **targetoptions**: `table`
+  * **options**: `table`
+    * **num**: `number` (optional)
+    * **type**: `string`
+    * **event**: `string`
+    * **icon**: `string`
+    * **label**: `string`
+    * **targeticon**: `string` (optional)
+    * **item**: `string` (optional)
+    * **action**: `function` (optional)
+    * **canInteract**: `function` (optional)
+    * **job**: `string` or `table` (optional)
+    * **gang**: `string` or `table` (optional)
+    * **citizenid**: `string` or `table` (optional)
+    * **drawDistance**: `number` (optional)
+    * **drawColor**: `table` (optional)
+    * **successDrawColor**: `table` (optional)
+  * **distance**: `float`
+
+```lua
+exports['qb-target']:AddBoxZone("bank_counter", vector3(150.1, -1040.5, 29.3), 2.5, 1.2, {
+  name = "bank_counter",
+  heading = 160.0,
+  debugPoly = false,
+  minZ = 28.5,
+  maxZ = 30.5
 }, {
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
+  options = {
+    {
+      num = 1,
+      type = "client",
+      event = "bank:openAccountMenu",
+      icon = "fas fa-university",
+      label = "Access Bank",
+      targeticon = "fas fa-building",
+      item = "bank_card",
+      action = function(entity)
+        TriggerEvent("bank:showUI", entity)
       end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
+      canInteract = function(entity, distance, data)
         return true
       end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-      drawDistance = 10.0, -- This is the distance for the sprite to draw if Config.DrawSprite is enabled, this is in GTA Units (OPTIONAL)
-      drawColor = {255, 255, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-      successDrawColor = {30, 144, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
+      job = { ["banker"] = 0 },
+      gang = { ["families"] = 1 },
+      citizenid = { ["XYZ123"] = true },
+      drawDistance = 10.0,
+      drawColor = {0, 123, 255, 200},
+      successDrawColor = {0, 255, 0, 255}
     }
   },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
+  distance = 3.0
 })
 ```
 
-### AddBoxZone
+***
 
-#### Function Format
+## AddPolyZone
 
-```etlua
--- This is the function from how you would use it inside qb-target/client.lua
-AddBoxZone(name: string, center: vector3, length: float, width: float, options: table, targetoptions: table)
+Adds a custom-shaped polygon zone that players can interact with
 
-options = {
-  name: string (UNIQUE),
-  heading: float,
-  debugPoly: boolean,
-  minZ: float,
-  maxZ: float,
-}
+* **name**: `string`
+* **points**: `table`
+  * A list of `vector2` points defining the polygon (minimum of 3, must be in drawing order).
+* **options**: `table`
+  * **name**: `string`
+  * **debugPoly**: `boolean`
+  * **minZ**: `float`
+  * **maxZ**: `float`
+* **targetoptions**: `table`
+  * **options**: `table`
+    * **num**: `number` (optional)
+    * **type**: `string`
+    * **event**: `string`
+    * **icon**: `string`
+    * **label**: `string`
+    * **targeticon**: `string` (optional)
+    * **item**: `string` (optional)
+    * **action**: `function` (optional)
+    * **canInteract**: `function` (optional)
+    * **job**: `string` or `table` (optional)
+    * **gang**: `string` or `table` (optional)
+    * **citizenid**: `string` or `table` (optional)
+    * **drawDistance**: `number` (optional)
+    * **drawColor**: `table` (optional)
+    * **successDrawColor**: `table` (optional)
+  * **distance**: `float`&#x20;
 
-targetoptions = {
-  options = {
-    {
-      num: number,
-      type: string,
-      event: string,
-      icon: string,
-      label: string,
-      targeticon: string,
-      item: string,
-      action: function,
-      canInteract: function,
-      job: string or table,
-      gang: string or table,
-      drawDistance: number,
-      drawColor: table,
-      successDrawColor: table
-    }
-  },
-  distance: float
-}
-```
-
-#### Config option, this will go into the Config.BoxZones table
-
-```etlua
-  ["index"] = { -- This can be a string or a number
-    name = "name", -- This is the name of the zone recognized by PolyZone, this has to be unique so it doesn't mess up with other zones
-    coords = vector3(x, y, z), -- These are the coords for the zone, this has to be a vector3 and the coords have to be a float value, fill in x, y and z with the coords
-    length = 1.5, -- The length of the boxzone calculated from the center of the zone, this has to be a float value
-    width = 1.6, -- The width of the boxzone calculated from the center of the zone, this has to be a float value
-    heading = 12.0, -- The heading of the boxzone, this has to be a float value
-    debugPoly = false, -- This is for enabling/disabling the drawing of the box, it accepts only a boolean value (true or false), when true it will draw the polyzone in green
-    minZ = 36.7, -- This is the bottom of the boxzone, this can be different from the Z value in the coords, this has to be a float value
-    maxZ = 38.9, -- This is the top of the boxzone, this can be different from the Z value in the coords, this has to be a float value
-    options = { -- This is your options table, in this table all the options will be specified for the target to accept
-      { -- This is the first table with options, you can make as many options inside the options table as you want
-        num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-        type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-        event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-        icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-        label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-        targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-        item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-        action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-        end,
-        canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          return true
-        end,
-        job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-        gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-        citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-        drawDistance = 10.0, -- This is the distance for the sprite to draw if Config.DrawSprite is enabled, this is in GTA Units (OPTIONAL)
-        drawColor = {255, 255, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-        successDrawColor = {30, 144, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-      }
-    },
-    distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-  },
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
-exports['qb-target']:AddBoxZone("name", vector3(x, y, z), 1.5, 1.6, { -- The name has to be unique, the coords a vector3 as shown, the 1.5 is the length of the boxzone and the 1.6 is the width of the boxzone, the length and width have to be float values
-  name = "name", -- This is the name of the zone recognized by PolyZone, this has to be unique so it doesn't mess up with other zones
-  heading = 12.0, -- The heading of the boxzone, this has to be a float value
-  debugPoly = false, -- This is for enabling/disabling the drawing of the box, it accepts only a boolean value (true or false), when true it will draw the polyzone in green
-  minZ = 36.7, -- This is the bottom of the boxzone, this can be different from the Z value in the coords, this has to be a float value
-  maxZ = 38.9, -- This is the top of the boxzone, this can be different from the Z value in the coords, this has to be a float value
-}, {
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-      end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        return true
-      end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-      drawDistance = 10.0, -- This is the distance for the sprite to draw if Config.DrawSprite is enabled, this is in GTA Units (OPTIONAL)
-      drawColor = {255, 255, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-      successDrawColor = {30, 144, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-    }
-  },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-})
-```
-
-### AddPolyZone
-
-#### Function Format
-
-```etlua
--- This is the function from how you would use it inside qb-target/client.lua
-AddPolyZone(name: string, points: table, options: table, targetoptions: table)
-
-points = {
-  vector2(x, y), vector2(x, y), -- Add a minimum of 3 points for this to work and they have to be in order of drawing
-}
-
-options = {
-  name: string (UNIQUE),
-  debugPoly: boolean,
-  minZ: float,
-  maxZ: float
-}
-
-targetoptions = {
-  options = {
-    {
-      num: number,
-      type: string,
-      event: string,
-      icon: string,
-      label: string,
-      targeticon: string,
-      item: string,
-      action: function,
-      canInteract: function,
-      job: string or table,
-      gang: string or table,
-      drawDistance: number,
-      drawColor: table,
-      successDrawColor: table
-    }
-  },
-  distance: float
-}
-```
-
-#### Config option, this will go into the Config.BoxZones table
-
-```etlua
-  ["index"] = { -- This can be a string or a number
-    name = "name", -- This is the name of the zone recognized by PolyZone, this has to be unique so it doesn't mess up with other zones
-    points = { -- This will draw the polyzones in order on the specific coords, every coord is a point that it will draw on
-      vector2(x, y), vector2(x, y), vector2(x, y), vector2(x, y),
-    }
-    debugPoly = false, -- This is for enabling/disabling the drawing of the box, it accepts only a boolean value (true or false), when true it will draw the polyzone in green
-    minZ = 36.7, -- This is the bottom of the boxzone, this can be different from the Z value in the coords, this has to be a float value
-    maxZ = 38.9, -- This is the top of the boxzone, this can be different from the Z value in the coords, this has to be a float value
-    options = { -- This is your options table, in this table all the options will be specified for the target to accept
-      { -- This is the first table with options, you can make as many options inside the options table as you want
-        num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-        type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-        event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-        icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-        label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-        targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-        item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-        action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-        end,
-        canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          return true
-        end,
-        job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-        gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-        citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-        drawDistance = 10.0, -- This is the distance for the sprite to draw if Config.DrawSprite is enabled, this is in GTA Units (OPTIONAL)
-        drawColor = {255, 255, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-        successDrawColor = {30, 144, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-      }
-    },
-    distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-  },
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
+```lua
 local points = {
-  vector2(x, y, z), vector2(x, y, z), vector2(x, y, z)
+  vector2(435.1, -981.0),
+  vector2(437.3, -983.5),
+  vector2(439.0, -980.2),
+  vector2(436.6, -978.7)
 }
-exports['qb-target']:AddPolyZone("name", points, {
-  name = "name", -- This is the name of the zone recognized by PolyZone, this has to be unique so it doesn't mess up with other zones
-  debugPoly = false, -- This is for enabling/disabling the drawing of the box, it accepts only a boolean value (true or false), when true it will draw the polyzone in green
-  minZ = 36.7, -- This is the bottom of the polyzone, this can be different from the Z value in the coords, this has to be a float value
-  maxZ = 38.9, -- This is the top of the polyzone, this can be different from the Z value in the coords, this has to be a float value
+
+exports['qb-target']:AddPolyZone("police_parking", points, {
+  name = "police_parking",
+  debugPoly = true,
+  minZ = 29.0,
+  maxZ = 31.5
 }, {
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-      end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        return true
-      end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-      drawDistance = 10.0, -- This is the distance for the sprite to draw if Config.DrawSprite is enabled, this is in GTA Units (OPTIONAL)
-      drawColor = {255, 255, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-      successDrawColor = {30, 144, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-    }
-  },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-})
-```
-
-### AddComboZone
-
-#### Function Format
-
-```etlua
--- This is the function from how you would use it inside qb-target/client.lua
-AddComboZone(zones: table, options: table, targetoptions: table)
-
-zones = {zone1: zone, zone2: zone} -- Minimum of 2 zones
-
-options = {
-  name: string (UNIQUE),
-  debugPoly: boolean
-}
-
-targetoptions = {
   options = {
     {
-      num: number,
-      type: string,
-      event: string,
-      icon: string,
-      label: string,
-      targeticon: string,
-      item: string,
-      action: function,
-      canInteract: function,
-      job: string or table,
-      gang: string or table,
-      drawDistance: number,
-      drawColor: table,
-      successDrawColor: table
+      num = 1,
+      type = "client",
+      event = "police:garageMenu",
+      icon = "fas fa-warehouse",
+      label = "Open Garage",
+      targeticon = "fas fa-car",
+      item = "garage_key",
+      action = function(entity)
+        TriggerEvent("police:garageUI", entity)
+      end,
+      canInteract = function(entity, distance, data)
+        return true
+      end,
+      job = { ["police"] = 0 },
+      gang = { ["lostmc"] = 1 },
+      citizenid = { ["POL123"] = true },
+      drawDistance = 8.0,
+      drawColor = {0, 100, 255, 255},
+      successDrawColor = {0, 255, 0, 255}
     }
   },
-  distance: float
-}
+  distance = 2.5
+})
 ```
 
-#### Export option, this will go into any client side resource file aside from qb-target's one
+***
 
-```etlua
-local zone1 = BoxZone:Create(vector3(500, 500, 100), 3.0, 5.0, {
-  name = "test",
-  debugPoly = false
+## AddComboZone
+
+Adds a composite zone made up of two or more PolyZones (CircleZone, BoxZone, or PolyZone), treated as a single interactive area
+
+* **zones**: `table`
+  * A list of zone objects (must be at least 2), e.g. instances created using `BoxZone:Create(...)`.
+* **options**: `table`
+  * **name**: `string`
+  * **debugPoly**: `boolean`
+* **targetoptions**: `table`
+  * **options**: `table`
+    * **num**: `number` (optional)
+    * **type**: `string`
+    * **event**: `string`
+    * **icon**: `string`
+    * **label**: `string`
+    * **targeticon**: `string` (optional)
+    * **item**: `string` (optional)
+    * **action**: `function` (optional)
+    * **canInteract**: `function` (optional)
+    * **job**: `string` or `table` (optional)
+    * **gang**: `string` or `table` (optional)
+    * **citizenid**: `string` or `table` (optional)
+    * **drawDistance**: `number` (optional)
+    * **drawColor**: `table` (optional)
+    * **successDrawColor**: `table` (optional)
+  * **distance**: `float`&#x20;
+
+```lua
+local zone1 = BoxZone:Create(vector3(500.0, 500.0, 100.0), 3.0, 5.0, {
+  name = "zone1",
+  heading = 0,
+  debugPoly = false,
+  minZ = 99.0,
+  maxZ = 101.0
 })
-local zone2 = BoxZone:Create(vector3(400, 400, 100), 3.0, 5.0, {
-  name = "test2",
-  debugPoly = false
+
+local zone2 = BoxZone:Create(vector3(505.0, 500.0, 100.0), 3.0, 5.0, {
+  name = "zone2",
+  heading = 0,
+  debugPoly = false,
+  minZ = 99.0,
+  maxZ = 101.0
 })
-local zones = {zone1, zone2}
-exports['qb-target']:AddComboZone(zones, {
-  name = "name", -- This is the name of the zone recognized by PolyZone, this has to be unique so it doesn't mess up with other zones
-  debugPoly = false, -- This is for enabling/disabling the drawing of the box, it accepts only a boolean value (true or false), when true it will draw the polyzone in green
+
+exports['qb-target']:AddComboZone({ zone1, zone2 }, {
+  name = "dual_box_zone",
+  debugPoly = true
 }, {
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
+  options = {
+    {
+      num = 1,
+      type = "client",
+      event = "combo:triggerEvent",
+      icon = "fas fa-link",
+      label = "Combo Action",
+      targeticon = "fas fa-crosshairs",
+      item = "multikey",
+      action = function(entity)
+        TriggerEvent("combo:doSomething", entity)
       end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
+      canInteract = function(entity, distance, data)
         return true
       end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-      drawDistance = 10.0, -- This is the distance for the sprite to draw if Config.DrawSprite is enabled, this is in GTA Units (OPTIONAL)
-      drawColor = {255, 255, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-      successDrawColor = {30, 144, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
+      job = { ["mechanic"] = 0 },
+      gang = { ["vagos"] = 1 },
+      citizenid = { ["COMBO001"] = true },
+      drawDistance = 12.0,
+      drawColor = {100, 100, 255, 255},
+      successDrawColor = {50, 255, 50, 255}
     }
   },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
+  distance = 2.0
 })
+
 ```
 
-### AddTargetBone
+***
 
-#### Function Format
+## AddTargetBone
 
-```etlua
--- This is the function from how you would use it inside qb-target/client.lua
-AddTargetBone(bones: table or string, parameters: table)
+Adds targetable interaction options to specific bones of vehicles
 
-parameters = {
+* **bones**: `string` or `table`
+  * A single bone name or a list of bone names (e.g. `"bonnet"` or `{ "bonnet", "boot" }`).
+* **parameters**: `table`
+  * **options**: `table`
+    * **num**: `number` (optional)
+    * **type**: `string`
+    * **event**: `string`
+    * **icon**: `string`
+    * **label**: `string`
+    * **targeticon**: `string` (optional)
+    * **item**: `string` (optional)
+    * **action**: `function` (optional)
+    * **canInteract**: `function` (optional)
+    * **job**: `string` or `table` (optional)
+    * **gang**: `string` or `table` (optional)
+    * **citizenid**: `string` or `table` (optional)
+  * **distance**: `float`&#x20;
+
+```lua
+local bones = { "bonnet", "boot" }
+
+exports['qb-target']:AddTargetBone(bones, {
   options = {
     {
-      num: number,
-      type: string,
-      event: string,
-      icon: string,
-      label: string,
-      targeticon: string,
-      item: string,
-      action: function,
-      canInteract: function,
-      job: string or table,
-      gang: string or table
+      num = 1,
+      type = "client",
+      event = "vehicle:inspectEngine",
+      icon = "fas fa-tools",
+      label = "Inspect Engine",
+      targeticon = "fas fa-car",
+      item = "wrench",
+      action = function(entity)
+        TriggerEvent("vehicle:diagnostics", entity)
+      end,
+      canInteract = function(entity, distance, data)
+        return IsEntityAVehicle(entity)
+      end,
+      job = { ["mechanic"] = 0 },
+      gang = { ["thelostmc"] = 1 },
+      citizenid = { ["WRENCH123"] = true }
     }
   },
-  distance: float
-}
-```
-
-#### Config option, this will go into the Config.TargetBones table
-
-```etlua
-  ["index"] = { -- This can be a string or a number
-    bones = {'boot', 'bonnet'} -- This is your bones table, this specifies all the bones that have to be added to the targetoptions, this can be a string or a table
-    options = { -- This is your options table, in this table all the options will be specified for the target to accept
-      { -- This is the first table with options, you can make as many options inside the options table as you want
-        num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-        type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-        event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-        icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-        label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-        targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-        item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-        action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-        end,
-        canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          return true
-        end,
-        job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-        gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-        citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-      }
-    },
-    distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-  },
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
-local bones = {
-  'boot',
-  'bonnet'
-}
-exports['qb-target']:AddTargetBone(bones, { -- The bones can be a string or a table
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-      end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        return true
-      end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-    }
-  },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
+  distance = 2.0
 })
-```
 
-### AddTargetEntity
-
-#### Function Format
-
-```etlua
-AddTargetEntity(entity: number or table, parameters: table)
-
-parameters = {
-  options = {
-    {
-      num: number,
-      type: string,
-      event: string,
-      icon: string,
-      label: string,
-      targeticon: string,
-      item: string,
-      action: function,
-      canInteract: function,
-      job: string or table,
-      gang: string or table
-    }
-  },
-  distance: float
-}
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
-CreateThread(function()
-  local model = `a_m_m_indian_01`
-  RequestModel(model)
-  while not HasModelLoaded(model) do
-    Wait(0)
-  end
-  local entity = CreatePed(0, model, GetEntityCoords(PlayerPedId()), GetEntityHeading(PlayerPedId()), true, false)
-  exports['qb-target']:AddTargetEntity(entity, { -- The specified entity number
-    options = { -- This is your options table, in this table all the options will be specified for the target to accept
-      { -- This is the first table with options, you can make as many options inside the options table as you want
-        num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-        type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-        event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-        icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-        label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-        targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-        item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-        action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-        end,
-        canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          return true
-        end,
-        job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-        gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-        citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-      }
-    },
-    distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-  })
-end)
-```
-
-### AddEntityZone
-
-#### Function Format
-
-```etlua
-AddEntityZone(name: string, entity: number, options: table, targetoptions: table)
-
-options = {
-  name: string (UNIQUE),
-  debugPoly: boolean,
-}
-
-targetoptions = {
-  options = {
-    {
-      num: number,
-      type: string,
-      event: string,
-      icon: string,
-      label: string,
-      targeticon: string,
-      item: string,
-      action: function,
-      canInteract: function,
-      job: string or table,
-      gang: string or table,
-      drawDistance: number,
-      drawColor: table,
-      successDrawColor: table
-    }
-  },
-  distance: float
-}
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
-CreateThread(function()
-  local model = `a_m_m_indian_01`
-  RequestModel(model)
-  while not HasModelLoaded(model) do
-    Wait(0)
-  end
-  local entity = CreatePed(0, model, GetEntityCoords(PlayerPedId()), GetEntityHeading(PlayerPedId()), true, false)
-  exports['qb-target']:AddEntityZone("name", entity, { -- The specified entity number
-    name = "name", -- This is the name of the zone recognized by PolyZone, this has to be unique so it doesn't mess up with other zones
-    debugPoly = false, -- This is for enabling/disabling the drawing of the box, it accepts only a boolean value (true or false), when true it will draw the polyzone in green 
-  }, {
-    options = { -- This is your options table, in this table all the options will be specified for the target to accept
-      { -- This is the first table with options, you can make as many options inside the options table as you want
-        num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-        type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-        event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-        icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-        label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-        targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-        item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-        action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-        end,
-        canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          return true
-        end,
-        job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-        gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-        citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-        drawDistance = 10.0, -- This is the distance for the sprite to draw if Config.DrawSprite is enabled, this is in GTA Units (OPTIONAL)
-        drawColor = {255, 255, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-        successDrawColor = {30, 144, 255, 255}, -- This is the color of the sprite if Config.DrawSprite is enabled, this will change the color for this PolyZone only, if this is not present, it will fallback to Config.DrawColor, for more information, check the comment above Config.DrawColor (OPTIONAL)
-      }
-    },
-    distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-  })
-end)
-```
-
-### AddTargetModel
-
-#### Function Format
-
-```etlua
-AddTargetModel(models: string or table, parameters: table)
-
-parameters = {
-  options = {
-    {
-      num: number,
-      type: string,
-      event: string,
-      icon: string,
-      label: string,
-      targeticon: string,
-      item: string,
-      action: function,
-      canInteract: function,
-      job: string or table,
-      gang: string or table
-    }
-  },
-  distance: float
-}
-```
-
-#### Config option, this will go into the Config.TargetModels table
-
-```etlua
-  ["index"] = { -- This can be a string or a number
-    models = { -- This is your models table, here you define all the target models to be interacted with, this can be a string or a table
-      'a_m_m_indian_01',
-    }
-    options = { -- This is your options table, in this table all the options will be specified for the target to accept
-      { -- This is the first table with options, you can make as many options inside the options table as you want
-        num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-        type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-        event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-        icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-        label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-        targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-        item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-        action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-        end,
-        canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          return true
-        end,
-        job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-        gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-        citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-      }
-    },
-    distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-  },
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
-local models = {
-  'a_m_m_indian_01',
-}
-exports['qb-target']:AddTargetModel(models, { -- This defines the models, can be a string or a table
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-      end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        return true
-      end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-    }
-  },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-})
-```
-
-
-
-### RemoveZone
-
-#### Function Format
-
-```etlua
-RemoveZone(name: string)
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
-exports['qb-target']:RemoveZone("name")
 ```
 
 ### RemoveTargetBone
 
-#### Function Format
+Removes targeting options from one or more bones on all applicable entities registered via `AddTargetBone`
 
-```etlua
-RemoveTargetBone(bones: table or string, labels: table or string)
+* **bones**: `string` or `table`&#x20;
+
+```lua
+exports['qb-target']:RemoveTargetBone({ "bonnet", "boot" })
 ```
 
-#### Export option, this will go into any client side resource file aside from qb-target's one
+***
 
-```etlua
-exports['qb-target']:RemoveTargetBone('bonnet', 'Test')
-```
+## AddTargetEntity
 
-### RemoveTargetModel
+Adds interaction options to a specific entity (such as a ped, vehicle, or object)
 
-#### Function Format
+* **entity**: `number` or `table`
+  * The entity instance or a list of entity instances (from `CreatePed`, `CreateVehicle`, etc).
+* **parameters**: `table`
+  * **options**: `table`
+    * **num**: `number` (optional)
+    * **type**: `string`
+    * **event**: `string`
+    * **icon**: `string`
+    * **label**: `string`
+    * **targeticon**: `string` (optional)
+    * **item**: `string` (optional)
+    * **action**: `function` (optional)
+    * **canInteract**: `function` (optional)
+    * **job**: `string` or `table` (optional)
+    * **gang**: `string` or `table` (optional)
+    * **citizenid**: `string` or `table` (optional)
+  * **distance**: `float`&#x20;
 
-```etlua
-RemoveTargetModel(models: table or string, labels: table or string)
-```
+```lua
+CreateThread(function()
+  local model = `a_m_m_business_01`
+  RequestModel(model)
+  while not HasModelLoaded(model) do Wait(0) end
+  local ped = CreatePed(0, model, 300.0, -500.0, 43.0, 0.0, true, false)
 
-#### Export option, this will go into any client side resource file aside from qb-target's one
+  exports['qb-target']:AddTargetEntity(ped, {
+    options = {
+      {
+        num = 1,
+        type = "client",
+        event = "npc:openDialog",
+        icon = "fas fa-comments",
+        label = "Talk to NPC",
+        targeticon = "fas fa-user",
+        item = "notepad",
+        action = function(entity)
+          TriggerEvent("npc:startConversation", entity)
+        end,
+        canInteract = function(entity, distance, data)
+          return not IsPedAPlayer(entity)
+        end,
+        job = { ["journalist"] = 0 },
+        gang = { ["ballas"] = 0 },
+        citizenid = { ["NPC001"] = true }
+      }
+    },
+    distance = 2.0
+  })
+end)
 
-```etlua
-exports['qb-target']:RemoveTargetModel('a_m_m_indian_01', 'Test')
 ```
 
 ### RemoveTargetEntity
 
-#### Function Format
+Removes specific target options from an entity by label(s).
 
-```etlua
-RemoveTargetEntity(entity: number or table, labels: table or string)
+* **entity**: `number` or `table`
+* **labels**: `string` or `table`
+
+```lua
+exports['qb-target']:RemoveTargetEntity(ped, "Talk to NPC")
 ```
 
-#### Export option, this will go into any client side resource file aside from qb-target's one
+***
 
-```etlua
-exports['qb-target']:RemoveTargetEntity(entity, 'Test')
+## AddEntityZone
+
+Adds a target zone that is dynamically attached to a specific entity. Useful for treating an entity like a movable zone (e.g. attaching interaction to a ped or vehicle)
+
+* **name**: `string`
+* **entity**: `number`
+  * The target entity's ID (such as a ped or vehicle created via `CreatePed` or `CreateVehicle`).
+* **options**: `table`
+  * **name**: `string`
+  * **debugPoly**: `boolean`
+* **targetoptions**: `table`
+  * **options**: `table`
+    * **num**: `number` (optional)
+    * **type**: `string`
+    * **event**: `string`
+    * **icon**: `string`
+    * **label**: `string`
+    * **targeticon**: `string` (optional)
+    * **item**: `string` (optional)
+    * **action**: `function` (optional)
+    * **canInteract**: `function` (optional)
+    * **job**: `string` or `table` (optional)
+    * **gang**: `string` or `table` (optional)
+    * **citizenid**: `string` or `table` (optional)
+    * **drawDistance**: `number` (optional)
+    * **drawColor**: `table` (optional)
+    * **successDrawColor**: `table` (optional)
+  * **distance**: `float`&#x20;
+
+```lua
+CreateThread(function()
+  local model = `s_m_y_cop_01`
+  RequestModel(model)
+  while not HasModelLoaded(model) do Wait(0) end
+  local ped = CreatePed(0, model, 425.1, -979.5, 30.7, 90.0, true, false)
+
+  exports['qb-target']:AddEntityZone("cop_ped", ped, {
+    name = "cop_ped",
+    debugPoly = false
+  }, {
+    options = {
+      {
+        num = 1,
+        type = "client",
+        event = "police:talkToCop",
+        icon = "fas fa-user-shield",
+        label = "Talk to Officer",
+        targeticon = "fas fa-comment-alt",
+        item = "badge",
+        action = function(entity)
+          TriggerEvent("police:startDialog", entity)
+        end,
+        canInteract = function(entity, distance, data)
+          return not IsPedAPlayer(entity)
+        end,
+        job = { ["police"] = 0 },
+        gang = { ["thelostmc"] = 1 },
+        citizenid = { ["COP001"] = true },
+        drawDistance = 6.0,
+        drawColor = {0, 150, 255, 255},
+        successDrawColor = {0, 255, 0, 255}
+      }
+    },
+    distance = 2.0
+  })
+end)
+
 ```
 
-### AddGlobalPed
+### RemoveEntityZone
 
-#### Function Format
+Removes a previously registered entity-based zone
 
-```etlua
-AddGlobalPed(parameters: table)
+* **name**: `string`
 
-parameters = {
+```lua
+exports['qb-target']:RemoveEntityZone("cop_ped")
+```
+
+***
+
+## AddTargetModel
+
+Adds interaction options to one or more models, allowing players to interact with all entities of those models (e.g. specific ped, vehicle, or prop types)
+
+* **models**: `string` or `table`
+  * A model name or a list of model names (e.g. `"prop_atm_01"` or `{ "prop_atm_01", "prop_atm_02" }`).
+* **parameters**: `table`
+  * **options**: `table`
+    * **num**: `number` (optional)
+    * **type**: `string`
+    * **event**: `string`
+    * **icon**: `string`
+    * **label**: `string`
+    * **targeticon**: `string` (optional)
+    * **item**: `string` (optional)
+    * **action**: `function` (optional)
+    * **canInteract**: `function` (optional)
+    * **job**: `string` or `table` (optional)
+    * **gang**: `string` or `table` (optional)
+    * **citizenid**: `string` or `table` (optional)
+  * **distance**: `float`&#x20;
+
+```lua
+local models = {
+  "prop_atm_01",
+  "prop_atm_02",
+  "prop_fleeca_atm"
+}
+
+exports['qb-target']:AddTargetModel(models, {
   options = {
     {
-      num: number,
-      type: string,
-      event: string,
-      icon: string,
-      label: string,
-      targeticon: string,
-      item: string,
-      action: function,
-      canInteract: function,
-      job: string or table,
-      gang: string or table
-    }
-  },
-  distance: float
-}
-```
-
-#### Config option, this will go into the Config.GlobalPedOptions table
-
-```etlua
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
+      num = 1,
+      type = "client",
+      event = "bank:accessATM",
+      icon = "fas fa-credit-card",
+      label = "Use ATM",
+      targeticon = "fas fa-dollar-sign",
+      item = "bank_card",
+      action = function(entity)
+        TriggerEvent("bank:openATM", entity)
       end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
+      canInteract = function(entity, distance, data)
         return true
       end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
+      job = { ["citizen"] = 0 },
+      gang = { ["none"] = 0 },
+      citizenid = { ["ATMUSER001"] = true }
     }
   },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
+  distance = 1.5
+})
+
 ```
 
-#### Export option, this will go into any client side resource file aside from qb-target's one
+### RemoveTargetModel
 
-```etlua
+Removes interaction options from one or more models.
+
+* **models**: `string` or `table`
+* **labels**: `string` or `table`
+
+```lua
+exports['qb-target']:RemoveTargetModel({ "prop_atm_01", "prop_fleeca_atm" }, "Use ATM")
+```
+
+***
+
+## AddGlobalPed
+
+Adds interaction options that apply to all peds in the world. Useful for universal interactions like restraining or identifying NPCs
+
+**parameters**: `table`
+
+* **options**: `table`
+  * **num**: `number` (optional)
+  * **type**: `string`
+  * **event**: `string`
+  * **icon**: `string`
+  * **label**: `string`
+  * **targeticon**: `string` (optional)
+  * **item**: `string` (optional)
+  * **action**: `function` (optional)
+  * **canInteract**: `function` (optional)
+  * **job**: `string` or `table` (optional)
+  * **gang**: `string` or `table` (optional)
+  * **citizenid**: `string` or `table` (optional)
+* **distance**: `float`&#x20;
+
+```lua
 exports['qb-target']:AddGlobalPed({
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-      end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        return true
-      end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-    }
-  },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-})
-```
-
-### AddGlobalVehicle
-
-#### Function Format
-
-```etlua
-AddGlobalVehicle(parameters: table)
-
-parameters = {
   options = {
     {
-      num: number,
-      type: string,
-      event: string,
-      icon: string,
-      label: string,
-      targeticon: string,
-      item: string,
-      action: function,
-      canInteract: function,
-      job: string or table,
-      gang: string or table
+      num = 1,
+      type = "client",
+      event = "police:friskPed",
+      icon = "fas fa-search",
+      label = "Frisk Ped",
+      targeticon = "fas fa-user-check",
+      item = "handcuffs",
+      action = function(entity)
+        if IsPedAPlayer(entity) then return false end
+        TriggerEvent("police:performFrisk", entity)
+      end,
+      canInteract = function(entity, distance, data)
+        return not IsPedAPlayer(entity)
+      end,
+      job = { ["police"] = 0 },
+      gang = { ["ballas"] = 1 },
+      citizenid = { ["PEDGLOBAL01"] = true }
     }
   },
-  distance: float
-}
-```
-
-#### Config option, this will go into the Config.GlobalVehicleOptions table
-
-```etlua
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-      end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        return true
-      end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-    }
-  },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
-exports['qb-target']:AddGlobalVehicle({
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-      end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        return true
-      end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-    }
-  },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
+  distance = 2.5
 })
-```
 
-### AddGlobalObject
-
-#### Function Format
-
-```etlua
-AddGlobalObject(parameters: table)
-
-parameters = {
-  options = {
-    {
-      num: number,
-      type: string,
-      event: string,
-      icon: string,
-      label: string,
-      targeticon: string,
-      item: string,
-      action: function,
-      canInteract: function,
-      job: string or table,
-      gang: string or table
-    }
-  },
-  distance: float
-}
-```
-
-#### Config option, this will go into the Config.GlobalObjectOptions table
-
-```etlua
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-      end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        return true
-      end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-    }
-  },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
-exports['qb-target']:AddGlobalObject({
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-      end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        return true
-      end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-    }
-  },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-})
-```
-
-### AddGlobalPlayer
-
-#### Function Format
-
-```etlua
-AddGlobalPlayer(parameters: table)
-
-parameters = {
-  options = {
-    {
-      num: number,
-      type: string,
-      event: string,
-      icon: string,
-      label: string,
-      targeticon: string,
-      item: string,
-      action: function,
-      canInteract: function,
-      job: string or table,
-      gang: string or table
-    }
-  },
-  distance: float
-}
-```
-
-#### Config option, this will go into the Config.GlobalPlayerOptions table
-
-```etlua
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-      end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        return true
-      end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-    }
-  },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
-exports['qb-target']:AddGlobalPlayer({
-  options = { -- This is your options table, in this table all the options will be specified for the target to accept
-    { -- This is the first table with options, you can make as many options inside the options table as you want
-      num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-      type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-      event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-      icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-      label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-      targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-      item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-      action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-      end,
-      canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-        if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-        return true
-      end,
-      job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-      gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-      citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-    }
-  },
-  distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-})
-```
-
-### RemoveGlobalTypeOptions
-
-#### Function Format
-
-```etlua
-RemoveGlobalTypeOptions(type: integer, labels: table or string)
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
-exports['qb-target']:RemoveType(1, 'Test') -- 1 is for peds
 ```
 
 ### RemoveGlobalPed
 
-#### Function Format
+Removes global interaction options from all peds.
 
-```etlua
-RemoveGlobalPed(labels: table or string)
+* **identifier**: `string`
+
+```lua
+exports['qb-target']:RemoveGlobalPed("Frisk Ped")
 ```
 
-#### Export option, this will go into any client side resource file aside from qb-target's one
+***
 
-```etlua
-exports['qb-target']:RemoveGlobalPed('Test')
+## AddGlobalVehicle
+
+Adds interaction options to all vehicles globally.
+
+* **parameters**: `table`
+
+```lua
+luaCopyEditexports['qb-target']:AddGlobalVehicle({
+  options = {
+    {
+      num = 1,
+      type = "client",
+      event = "vehicle:repair",
+      icon = "fas fa-wrench",
+      label = "Repair Vehicle",
+      action = function(entity)
+        TriggerEvent("mechanic:repairVehicle", entity)
+      end,
+      canInteract = function(entity)
+        return IsEntityAVehicle(entity)
+      end,
+      job = { ["mechanic"] = 0 },
+      gang = { ["thelostmc"] = 1 }
+    }
+  },
+  distance = 3.0
+})
 ```
 
 ### RemoveGlobalVehicle
 
-#### Function Format
+Removes global options from all vehicles.
 
-```etlua
-RemoveGlobalVehicle(labels: table or string)
+* **labels**: `string` or `table`
+
+```lua
+exports['qb-target']:RemoveGlobalVehicle("Repair Vehicle")
 ```
 
-#### Export option, this will go into any client side resource file aside from qb-target's one
+***
 
-```etlua
-exports['qb-target']:RemoveGlobalVehicle('Test')
+## AddGlobalObject
+
+Adds interaction options to all static world objects globally.
+
+* **parameters**: `table`
+
+```lua
+exports['qb-target']:AddGlobalObject({
+  options = {
+    {
+      num = 1,
+      type = "client",
+      event = "object:inspect",
+      icon = "fas fa-search",
+      label = "Inspect Object",
+      action = function(entity)
+        print("Inspected:", entity)
+      end,
+      canInteract = function(entity)
+        return true
+      end,
+      job = { ["inspector"] = 0 },
+      gang = { ["ballas"] = 1 }
+    }
+  },
+  distance = 2.0
+})
 ```
 
 ### RemoveGlobalObject
 
-#### Function Format
+Removes global options from all world objects.
 
-```etlua
-RemoveGlobalObject(labels: table or string)
+* **labels**: `string` or `table`
+
+```lua
+exports['qb-target']:RemoveGlobalObject("Inspect Object")
 ```
 
-#### Export option, this will go into any client side resource file aside from qb-target's one
+***
 
-```etlua
-exports['qb-target']:RemoveGlobalObject('Test')
+## AddGlobalPlayer
+
+Adds interaction options to all player entities globally
+
+* **parameters**: `table`
+
+```lua
+luaCopyEditexports['qb-target']:AddGlobalPlayer({
+  options = {
+    {
+      num = 1,
+      type = "client",
+      event = "player:interact",
+      icon = "fas fa-user-friends",
+      label = "Interact with Player",
+      action = function(entity)
+        print("Interacting with player:", entity)
+      end,
+      canInteract = function(entity)
+        return IsPedAPlayer(entity)
+      end,
+      job = { ["medic"] = 0 },
+      gang = { ["vagos"] = 1 }
+    }
+  },
+  distance = 2.5
+})
 ```
 
 ### RemoveGlobalPlayer
 
-#### Function Format
+Removes global options that apply to all player entities.
 
-```etlua
-RemoveGlobalPlayer(labels: table or string)
+* **labels**: `string` or `table`
+
+```lua
+exports['qb-target']:RemoveGlobalPlayer("Interact with Player")
 ```
 
-#### Export option, this will go into any client side resource file aside from qb-target's one
+***
 
-```etlua
-exports['qb-target']:RemoveGlobalPlayer('Test')
-```
+## SpawnPed
 
-### RaycastCamera
+Spawns one or multiple peds with optional animations, relationships, weapons, and targeting
 
-#### Function Format
+* datatable: `table`
+  * **model**: `string`
+  * **coords**: `vector4`
+  * **freeze**: `boolean` (optional)
+  * **invincible**: `boolean` (optional)
+  * **blockevents**: `boolean` (optional)
+  * **animDict**: `string` (optional)
+  * **anim**: `string` (optional)
+  * **flag**: `number` (optional)
+  * **scenario**: `string` (optional)
+  * **pedrelations**: `table` (optional)
+    * **groupname**: `string`
+    * **toowngroup**: `number`
+    * **toplayer**: `number`
+  * **weapon**: `table` (optional)
+    * **name**: `string`
+    * **ammo**: `number`
+    * **hidden**: `boolean`
+  * **target**: `table` (optional)
+    * **useModel**: `boolean`
+    * **options**: `table`
+      * **type**: `string`
+      * **event**: `string`
+      * **icon**: `string`
+      * **label**: `string`
+    * **distance**: `float`
+  * **action**: `function` (optional)
 
-```etlua
-RaycastCamera(flag: number, playerCoords: vector3) -- Preferably 30 or -1, -1 will not interact with any hashes higher than 32 bit and 30 will not interact with the world
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
-CreateThread(function()
-  while true do
-    local curFlag = 30
-    local coords, distance, entity, entityType = exports['qb-target']:RaycastCamera(-1, GetEntityCoords(PlayerPedId()))
-    if entityType > 0 then
-      print('Got an entity')
-    end
-    if curFlag = 30 then curFlag = -1 else curFlag = 30 end
-    Wait(100)
-  end
-end)
-```
-
-### Ped Spawner
-
-#### Function Format
-
-```etlua
-SpawnPed(datatable: table)
-
--- This is for 1 ped
-datatable = {
-  model: string or number,
-  coords: vector4,
-  minusOne: boolean,
-  freeze: boolean,
-  invincible: boolean,
-  blockevents: boolean,
-  animDict: string,
-  anim: string,
-  flag: number,
-  scenario: string,
-  target = {
-    useModel: boolean,
-    options = {
-      {
-        num: number,
-        type: string,
-        event: string,
-        icon: string,
-        label: string,
-        targeticon: string,
-        item: string,
-        action: function,
-        canInteract: function,
-        job: string or table,
-        gang: string or table
-      }
+```lua
+exports['qb-target']:SpawnPed({
+  [1] = {
+    model = 'a_m_m_business_01',
+    coords = vector4(300.0, -500.0, 43.0, 90.0),
+    freeze = true,
+    invincible = true,
+    blockevents = true,
+    animDict = 'amb@world_human_hang_out_street@male_b@base',
+    anim = 'base',
+    flag = 1,
+    scenario = 'WORLD_HUMAN_AA_SMOKE',
+    pedrelations = {
+      groupname = 'AMBIENT_GANG_BALLAS',
+      toowngroup = 0,
+      toplayer = 3
     },
-    distance: float
-  },
-  currentpednumber: number
-}
-
--- This is for multiple peds
-datatable = {
-  [index: integer] = {
-    model: string or number,
-    coords: vector4,
-    minusOne: boolean,
-    freeze: boolean,
-    invincible: boolean,
-    blockevents: boolean,
-    animDict: string,
-    anim: string,
-    flag: number,
-    scenario: string,
+    weapon = {
+      name = 'weapon_pistol',
+      ammo = 12,
+      hidden = false
+    },
     target = {
-      useModel: boolean,
+      useModel = false,
       options = {
         {
-          num: number,
-          type: string,
-          event: string,
-          icon: string,
-          label: string,
-          targeticon: string,
-          item: string,
-          action: function,
-          canInteract: function,
-          job: string or table,
-          gang: string or table
+          type = "client",
+          event = "npc:talk",
+          icon = "fas fa-comment",
+          label = "Talk"
         }
       },
-      distance: float
+      distance = 2.5
     },
-    currentpednumber: number
-  }
-}
-```
-
-#### Config option, this will go into the Config.Peds table
-
-```etlua
--- Any of the options in the index table besides model and coords are optional, you can leave them out or set them to false
-[1] = { -- This MUST be a number (UNIQUE), if you make it a string it won't be able to delete peds spawned with the export
-  model = 'a_m_m_indian_01', -- This is the ped model that is going to be spawning at the given coords
-  coords = vector4(x, y, z, w), -- This is the coords that the ped is going to spawn at, always has to be a vector4 and the w value is the heading
-  minusOne = true, -- Set this to true if your ped is hovering above the ground but you want it on the ground (OPTIONAL)
-  freeze = true, -- Set this to true if you want the ped to be frozen at the given coords (OPTIONAL)
-  invincible = true, -- Set this to true if you want the ped to not take any damage from any source (OPTIONAL)
-  blockevents = true, -- Set this to true if you don't want the ped to react the to the environment (OPTIONAL)
-  animDict = 'abigail_mcs_1_concat-0', -- This is the animation dictionairy to load the animation to play from (OPTIONAL)
-  anim = 'csb_abigail_dual-0', -- This is the animation that will play chosen from the animDict, this will loop the whole time the ped is spawned (OPTIONAL)
-  flag = 1, -- This is the flag of the animation to play, for all the flags, check the TaskPlayAnim native here https://docs.fivem.net/natives/?_0x5AB552C6 (OPTIONAL)
-  scenario = 'WORLD_HUMAN_AA_COFFEE', -- This is the scenario that will play the whole time the ped is spawned, this cannot pair with anim and animDict (OPTIONAL)
-  target = { -- This is the target options table, here you can specify all the options to display when targeting the ped (OPTIONAL)
-    useModel = false, -- This is the option for which target function to use, when this is set to true it'll use AddTargetModel and add these to al models of the given ped model, if it is false it will only add the options to this specific ped
-    options = { -- This is your options table, in this table all the options will be specified for the target to accept
-      { -- This is the first table with options, you can make as many options inside the options table as you want
-        num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-        type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-        event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-        icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-        label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-        targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-        item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-        action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-        end,
-        canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          return true
-        end,
-        job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-        gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-        citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-      }
-    },
-    distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-  },
-  currentpednumber = 0, -- This is the current ped number, this will be assigned when spawned, you can leave this out because it will always be created (OPTIONAL)
-},
-```
-
-#### Export option, this will go into any client side resource file aside from qb-target's one
-
-```etlua
--- This is for 1 ped only
-exports['qb-target']:SpawnPed({
-  model = 'a_m_m_indian_01', -- This is the ped model that is going to be spawning at the given coords
-  coords = vector4(x, y, z, w), -- This is the coords that the ped is going to spawn at, always has to be a vector4 and the w value is the heading
-  minusOne = true, -- Set this to true if your ped is hovering above the ground but you want it on the ground (OPTIONAL)
-  freeze = true, -- Set this to true if you want the ped to be frozen at the given coords (OPTIONAL)
-  invincible = true, -- Set this to true if you want the ped to not take any damage from any source (OPTIONAL)
-  blockevents = true, -- Set this to true if you don't want the ped to react the to the environment (OPTIONAL)
-  animDict = 'abigail_mcs_1_concat-0', -- This is the animation dictionairy to load the animation to play from (OPTIONAL)
-  anim = 'csb_abigail_dual-0', -- This is the animation that will play chosen from the animDict, this will loop the whole time the ped is spawned (OPTIONAL)
-  flag = 1, -- This is the flag of the animation to play, for all the flags, check the TaskPlayAnim native here https://docs.fivem.net/natives/?_0x5AB552C6 (OPTIONAL)
-  scenario = 'WORLD_HUMAN_AA_COFFEE', -- This is the scenario that will play the whole time the ped is spawned, this cannot pair with anim and animDict (OPTIONAL)
-  target = { -- This is the target options table, here you can specify all the options to display when targeting the ped (OPTIONAL)
-    useModel = false, -- This is the option for which target function to use, when this is set to true it'll use AddTargetModel and add these to al models of the given ped model, if it is false it will only add the options to this specific ped
-    options = { -- This is your options table, in this table all the options will be specified for the target to accept
-      { -- This is the first table with options, you can make as many options inside the options table as you want
-        num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-        type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-        event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-        icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-        label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-        targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-        item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-        action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-        end,
-        canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-          if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-          return true
-        end,
-        job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-        gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-        citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-      }
-    },
-    distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-  },
-  currentpednumber = 0, -- This is the current ped number, this will be assigned when spawned, you can leave this out because it will always be created (OPTIONAL)
-})
-
--- This is for multiple peds, here I used 2 of the same peds
-exports['qb-target']:SpawnPed({
-  [1] = { -- This has to be a number otherwise it can't delete the ped afterwards
-    model = 'a_m_m_indian_01', -- This is the ped model that is going to be spawning at the given coords
-    coords = vector4(x, y, z, w), -- This is the coords that the ped is going to spawn at, always has to be a vector4 and the w value is the heading
-    minusOne = true, -- Set this to true if your ped is hovering above the ground but you want it on the ground (OPTIONAL)ch target function to use, when this is set to true it'll use AddTargetModel and add these to al models of the given ped model, if it is false it will only add the options to this specific ped
-      options = { -- This is your options table, in this table all the options will be specified for the target to accept
-        { -- This is the first table with options, you can make as many options inside the options table as you want
-          num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-          type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-          event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-          icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-          label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-          targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-          item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-          action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-            if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-            TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-          end,
-          canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-            if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-            return true
-          end,
-          job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-          gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-          citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-        }
-      },
-      distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-    },
-    currentpednumber = 0, -- This is the current ped number, this will be assigned when spawned, you can leave this out because it will always be created (OPTIONAL)
-  },
-  [2] = {
-    model = 'a_m_m_indian_01', -- This is the ped model that is going to be spawning at the given coords
-    coords = vector4(x, y, z, w), -- This is the coords that the ped is going to spawn at, always has to be a vector4 and the w value is the heading
-    minusOne = true, -- Set this to true if your ped is hovering above the ground but you want it on the ground (OPTIONAL)
-    freeze = true, -- Set this to true if you want the ped to be frozen at the given coords (OPTIONAL)
-    invincible = true, -- Set this to true if you want the ped to not take any damage from any source (OPTIONAL)
-    blockevents = true, -- Set this to true if you don't want the ped to react the to the environment (OPTIONAL)
-    animDict = 'abigail_mcs_1_concat-0', -- This is the animation dictionairy to load the animation to play from (OPTIONAL)
-    anim = 'csb_abigail_dual-0', -- This is the animation that will play chosen from the animDict, this will loop the whole time the ped is spawned (OPTIONAL)
-    flag = 1, -- This is the flag of the animation to play, for all the flags, check the TaskPlayAnim native here https://docs.fivem.net/natives/?_0x5AB552C6 (OPTIONAL)
-    scenario = 'WORLD_HUMAN_AA_COFFEE', -- This is the scenario that will play the whole time the ped is spawned, this cannot pair with anim and animDict (OPTIONAL)
-    target = { -- This is the target options table, here you can specify all the options to display when targeting the ped (OPTIONAL)
-      useModel = false, -- This is the option for which target function to use, when this is set to true it'll use AddTargetModel and add these to al models of the given ped model, if it is false it will only add the options to this specific ped
-      options = { -- This is your options table, in this table all the options will be specified for the target to accept
-        { -- This is the first table with options, you can make as many options inside the options table as you want
-          num = 1, -- This is the position number of your option in the list of options in the qb-target context menu (OPTIONAL)
-          type = "client", -- This specifies the type of event the target has to trigger on click, this can be "client", "server", "command" or "qbcommand", this is OPTIONAL and will only work if the event is also specified
-          event = "Test:Event", -- This is the event it will trigger on click, this can be a client event, server event, command or qbcore registered command, NOTICE: Normal command can't have arguments passed through, QBCore registered ones can have arguments passed through
-          icon = 'fas fa-example', -- This is the icon that will display next to this trigger option
-          label = 'Test', -- This is the label of this option which you would be able to click on to trigger everything, this has to be a string
-          targeticon = 'fas fa-example', -- This is the icon of the target itself, the icon changes to this when it turns blue on this specific option, this is OPTIONAL
-          item = 'handcuffs', -- This is the item it has to check for, this option will only show up if the player has this item, this is OPTIONAL
-          action = function(entity) -- This is the action it has to perform, this REPLACES the event and this is OPTIONAL
-            if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-            TriggerEvent('testing:event', 'test') -- Triggers a client event called testing:event and sends the argument 'test' with it
-          end,
-          canInteract = function(entity, distance, data) -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
-            if IsPedAPlayer(entity) then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
-            return true
-          end,
-          job = 'police', -- This is the job, this option won't show up if the player doesn't have this job, this can also be done with multiple jobs and grades, if you want multiple jobs you always need a grade with it: job = {["police"] = 0, ["ambulance"] = 2},
-          gang = 'ballas', -- This is the gang, this option won't show up if the player doesn't have this gang, this can also be done with multiple gangs and grades, if you want multiple gangs you always need a grade with it: gang = {["ballas"] = 0, ["thelostmc"] = 2},
-          citizenid = 'JFD98238', -- This is the citizenid, this option won't show up if the player doesn't have this citizenid, this can also be done with multiple citizenid's, if you want multiple citizenid's there is a specific format to follow: citizenid = {["JFD98238"] = true, ["HJS29340"] = true},
-        }
-      },
-      distance = 2.5, -- This is the distance for you to be at for the target to turn blue, this is in GTA units and has to be a float value
-    },
-    currentpednumber = 0, -- This is the current ped number, this will be assigned when spawned, you can leave this out because it will always be created (OPTIONAL)
+    action = function(pedData)
+      TriggerEvent('npc:spawned', pedData)
+    end
   }
 })
 ```
 
 ### RemoveSpawnedPed
 
-#### Function Format
+Removes one or more peds previously spawned with `SpawnPed`&#x20;
 
-```etlua
-RemoveSpawnedPed(peds: number or table)
+* **peds**: `number` or `table`
+
+```lua
+if DoesEntityExist(myPed) then
+  exports['qb-target']:RemoveSpawnedPed({ [1] = myPed })
+end
 ```
 
-#### Export option, this will go into any client side resource file aside from qb-target's one
+***
 
-```etlua
-if DoesEntityExist(a_ped) then
-    exports['qb-target']:RemoveSpawnedPed({[5] = a_ped}) -- The 5 specified here is to delete the peds currentpednumber from the config, which here is the index of the ped in the config 5
+## RemoveGlobalTypeOptions
+
+Removes options from a global target type (e.g. peds, vehicles).
+
+* **type**: `number` (1 for peds, 2 for vehicles, 3 for objects, 4 for players)
+* **labels**: `string` or `table`
+
+```lua
+exports['qb-target']:RemoveType(1, "Frisk Ped")
 ```
 
-### AllowTargeting
+***
 
-#### Function Format
+## RemoveZone
 
-```etlua
-AllowTargeting(allow: bool)
+Removes a zone that was previously added using `AddCircleZone`, `AddBoxZone`, `AddPolyZone`, or `AddComboZone`
+
+* **name**: `string`
+
+```lua
+exports['qb-target']:RemoveZone("shop_zone")
 ```
 
-#### Export option, this will go into any client side resource file aside from qb-target's one
+***
 
-```etlua
+## RaycastCamera
+
+Performs a raycast from the camera's viewpoint to detect the closest entity in the crosshair.
+
+* **flag**: `number`
+* **playerCoords**: `vector3`
+
+```lua
+CreateThread(function()
+  while true do
+    local flag = 30
+    local coords, distance, entity, entityType = exports['qb-target']:RaycastCamera(flag, GetEntityCoords(PlayerPedId()))
+    if entityType > 0 then
+      print("Entity hit:", entity)
+    end
+    flag = (flag == 30 and -1) or 30
+    Wait(100)
+  end
+end)
+```
+
+***
+
+## AllowTargeting
+
+Enables or disables qb-target interactions for the player
+
+* **allow**: `boolean`
+
+```lua
 if IsEntityDead(PlayerPedId()) then
-    exports['qb-target']:AllowTargeting(false)
+  exports['qb-target']:AllowTargeting(false)
 end
 ```

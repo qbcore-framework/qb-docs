@@ -61,6 +61,7 @@
 * [👔 qb-management](qbcore-resources/qb-management.md)
 * [🧑‍🔧 qb-mechanicjob](qbcore-resources/qb-mechanicjob.md)
 * [↖️ qb-menu](qbcore-resources/qb-menu.md)
+* [qb-minigames](qbcore-resources/qb-minigames.md)
 * [🙋 qb-multicharacter](qbcore-resources/qb-multicharacter.md)
 * [📰 qb-newsjob](qbcore-resources/qb-newsjob.md)
 * [🤑 qb-pawnshop](qbcore-resources/qb-pawnshop.md)

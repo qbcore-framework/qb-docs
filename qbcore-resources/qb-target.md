@@ -663,7 +663,7 @@ Adds interaction options to all vehicles globally.
 * **parameters**: `table`
 
 ```lua
-luaCopyEditexports['qb-target']:AddGlobalVehicle({
+exports['qb-target']:AddGlobalVehicle({
   options = {
     {
       num = 1,
@@ -745,7 +745,7 @@ Adds interaction options to all player entities globally
 * **parameters**: `table`
 
 ```lua
-luaCopyEditexports['qb-target']:AddGlobalPlayer({
+exports['qb-target']:AddGlobalPlayer({
   options = {
     {
       num = 1,

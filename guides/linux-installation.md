@@ -60,7 +60,7 @@ mysql -u root -p
 
 Once you're in the console, it should look a bit like this
 
-![MariaDB Command Line](../.gitbook/assets/Terminus\_LjifucOy4i.png)
+![MariaDB Command Line](../.gitbook/assets/Terminus_LjifucOy4i.png)
 
 We will now proceed with creating an administrator user account. Enter the commands as they are seen below in numerical order. You will only need to edit a few things (Such as username, password and host)
 
@@ -75,8 +75,7 @@ FLUSH PRIVILEGES;
 'user1', localhost and 'password1' variables are all expected to be changed. You can change anything in the 'user1' and 'password1' fields to your desired values as that's what you'll use while logging in.
 
 \
-Localhost is a bit tricky. Since Linux does not natively feature a Desktop Environment, you will most likely access the database with the user remotely. To do so, instead of localhost, enter a % (A % means any host) so it looks as **'user1'@'%'**
-We will be covering how to connect and what ports to open below.
+Localhost is a bit tricky. Since Linux does not natively feature a Desktop Environment, you will most likely access the database with the user remotely. To do so, instead of localhost, enter a % (A % means any host) so it looks as **'user1'@'%'** We will be covering how to connect and what ports to open below.
 {% endhint %}
 
 ### Allowing remote access (DB)
@@ -89,15 +88,15 @@ We open this file using the command **`sudo nano 50-server.cnf`**, which opens a
 
 The screenshot below shows you what line needs changing. The default setting will have the bind address set to 127.0.0.1, which only allows local host connections. We will change this to 0.0.0.0 to allow any and all connections to the database.
 
-![50-server.cnf](../.gitbook/assets/Terminus\_SOG5oqcssc.png)
+![50-server.cnf](../.gitbook/assets/Terminus_SOG5oqcssc.png)
 
 Editing in nano is fairly simple, it's the same as using a notepad but without a mouse. Use arrow keys to move through the code and normally edit the file as you would in a normal environment.
 
 After you've edited the bind address to 0.0.0.0, you can exit the file using CTRL+X, pressing Y when prompted to save changes and Enter when prompted what to save the file as (It will always be the same file name as when it was open).
 
-![After pressing CTRL+X we press Y to save changes](<../.gitbook/assets/Terminus\_Sf4x4s5sbx (1).png>)
+![After pressing CTRL+X we press Y to save changes](<../.gitbook/assets/Terminus_Sf4x4s5sbx (1).png>)
 
-![Leave the file name the same and press enter.](<../.gitbook/assets/Terminus\_Ot5jFzizkD (1).png>)
+![Leave the file name the same and press enter.](<../.gitbook/assets/Terminus_Ot5jFzizkD (1).png>)
 
 After that, we restart the mariadb service to confirm changes to the files using the commands below
 
@@ -111,7 +110,7 @@ You can check the status of the service by using the below command
 sudo systemctl status mariadb
 ```
 
-![systemctl status of MariaDB](../.gitbook/assets/Terminus\_f7VVyPHkLC.png)
+![systemctl status of MariaDB](../.gitbook/assets/Terminus_f7VVyPHkLC.png)
 
 We have allowed remote access from all other hosts. Are we able to connect now? Not quite yet. There is one more thing left to do.
 
@@ -129,7 +128,7 @@ sudo iptables --version
 
 If you get a response similiar to what is below in the screenshot, then you've got iptables installed and ready for use.
 
-![iptables returning its version](../.gitbook/assets/Terminus\_8ovVMYD2CK.png)
+![iptables returning its version](../.gitbook/assets/Terminus_8ovVMYD2CK.png)
 
 Once you've verified that you have iptables installed, just run the following command to open the 3306 port for MySQL Connections.
 
@@ -141,7 +140,7 @@ You can check if the port is open and able to be seen by using this website [her
 
 ## Running Artifacts
 
-Using artifacts is the most important bit, because it is essentially the brain of the server. We use wget, a tool present on the Linux system to directly download the archive from Cfx's Webpage. [Here](https://runtime.fivem.net/artifacts/fivem/build\_proot\_linux/master/) is a list of all Linux artifacts, but it's best if you just get the latest one. Once you've made your decision on which version of the artifacts to get, simply right click and use "Copy Link". This will copy a direct link to the artifacts that we'll use in the wget command.
+Using artifacts is the most important bit, because it is essentially the brain of the server. We use wget, a tool present on the Linux system to directly download the archive from Cfx's Webpage. [Here](https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/) is a list of all Linux artifacts, but it's best if you just get the latest one. Once you've made your decision on which version of the artifacts to get, simply right click and use "Copy Link". This will copy a direct link to the artifacts that we'll use in the wget command.
 
 Move to whichever folder you are going to download the file to. (I usually make a seperate folder for Artifacts and Files, just so they're seperated.) Use the following command (Remember to replace the link with whatever you get from the Artifacts website)
 

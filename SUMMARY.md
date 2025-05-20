@@ -1,10 +1,8 @@
 # Table of contents
 
-* [👋 Introduction](README.md)
-
 ## Project Sponsors
 
-* [✍️ JetBrains](project-sponsors/jetbrains.md)
+* [✍️ JetBrains](README.md)
 * [📚 GitBook](project-sponsors/gitbook.md)
 * [🗃️ Pleb Masters: Forge](project-sponsors/pleb-masters-forge.md)
 * [🎥 KakarotDevs](project-sponsors/kakarotdevs.md)

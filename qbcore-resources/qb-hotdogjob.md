@@ -9,7 +9,7 @@ description: Hot dogs! Get your hot dogs here!
 * Allows players to rent a hot dog cart, play a mini game to make hot dogs and sell them to NPC's
 
 {% hint style="warning" %}
-This resource relies on [qb-keyminigame.md](qb-keyminigame.md "mention") otherwise it won't work
+This resource relies on [Broken link](broken-reference "mention") otherwise it won't work
 {% endhint %}
 
 ## Configuration

@@ -127,9 +127,9 @@ Config.BlacklistedPeds = { -- these NPCs will delete themslves on spawn
 ## **Consumables** <a href="#blob-path" id="blob-path"></a>
 
 {% hint style="warning" %}
-When adding new consumables you need to go into the server/consumables.lua and make that item useable with the `QBCore.Functions.CreateUseableItem` function more info on how to do that in [server-function-reference.md](../qb-core/server-function-reference.md "mention")&#x20;
+When adding new consumables you need to go into the server/consumables.lua and make that item useable with the `QBCore.Functions.CreateUseableItem` function more info on how to do that in [server-function-reference.md](../qb-core/server-function-reference.md "mention")
 
-You can also increase the thirst or hunger with ["itemname"] = math.random(-20, -10) or a single number, the only important thing is that the lower number is first
+You can also increase the thirst or hunger with \["itemname"] = math.random(-20, -10) or a single number, the only important thing is that the lower number is first
 {% endhint %}
 
 ```lua
@@ -161,28 +161,32 @@ Timed jobs are used to execute code at a certain time every day. For example exe
 
 ### Usage (Server Exports):
 
-- CreateTimedJob(hour: number, min: number, callback: function)
-    > Used for registering the actual timed job. Returns the index of the timed job which can be used to force run or stop the timed job.<br>
+*   CreateTimedJob(hour: number, min: number, callback: function)
+
+    > Used for registering the actual timed job. Returns the index of the timed job which can be used to force run or stop the timed job.\
     > **Example:**
+    >
     > ```lua
     > -- `idx` becomes the index of the timed job.
-    >local idx = exports["qb-smallresources"]:CreateTimedJob(8, 20, function(day, hour, min)
-    >	 if day == 1 then -- check if its monday
+    > local idx = exports["qb-smallresources"]:CreateTimedJob(8, 20, function(day, hour, min)
+    >    if day == 1 then -- check if its monday
     >        print("Its currently 08:20 AM on a monday")
     >    end
-    >end)
+    > end)
     > ```
-    
-- ForceRunTimedJob(idx: number)
-    > Used to force run a timed job, even if the time isnt correct. Does not bypass local checks in the actual callback though.<br>
+*   ForceRunTimedJob(idx: number)
+
+    > Used to force run a timed job, even if the time isnt correct. Does not bypass local checks in the actual callback though.\
     > **Example:**
+    >
     > ```lua
     > exports["qb-smallresources"]:ForceRunTimedJob(2)
     > ```
+*   StopTimedJob(idx: number)
 
-- StopTimedJob(idx: number)
-    > Stops the timed job forever (unless registered again).<br>
+    > Stops the timed job forever (unless registered again).\
     > **Example:**
+    >
     > ```lua
     > exports["qb-smallresources"]:StopTimedJob(3)
     > ```
@@ -344,12 +348,12 @@ end)
 * heavyarmor - Gives armor on use
 * binoculars - Useable binoculars to look far distances
 * parachute - adds a parachute to the player allowing to deploy it in the air
-* firework1 - Make things go boom&#x20;
+* firework1 - Make things go boom
 * firework2 - More fireworks
 * firework3 - So many fireworks
-* firework4 - Looks nice&#x20;
-* lockpick - The item used to trigger [qb-lockpick.md](qb-lockpick.md "mention")
-* advancedlockpick - Another item used to trigger [qb-lockpick.md](qb-lockpick.md "mention")
+* firework4 - Looks nice
+* lockpick - The item used to trigger [Broken link](broken-reference "mention")
+* advancedlockpick - Another item used to trigger [Broken link](broken-reference "mention")
 
 ## Commands
 

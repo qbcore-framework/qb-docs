@@ -6,7 +6,7 @@ description: Put the money in the bag!
 
 ## Introduction
 
-* Allows the player to rob the many stores around the city. When they rob the store, they lockpick the cash registers which uses [qb-lockpick.md](qb-lockpick.md "mention"). Once both registers are hit, there is a chance to get a sticky note for the safe code. If the store does not have an electronic safe, it will use the [safecracker](https://github.com/qbcore-framework/safecracker) minigame. Players will get "markedbills" for both the registers and safes
+* Allows the player to rob the many stores around the city. When they rob the store, they lockpick the cash registers which uses [Broken link](broken-reference "mention"). Once both registers are hit, there is a chance to get a sticky note for the safe code. If the store does not have an electronic safe, it will use the [safecracker](https://github.com/qbcore-framework/safecracker) minigame. Players will get "markedbills" for both the registers and safes
 * Cops get called and can use the `camid` provided to view the specified camera more info on that in [qb-policejob.md](qb-policejob.md "mention")
 
 ## Configuration

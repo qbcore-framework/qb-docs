@@ -32,6 +32,7 @@ Opens the menu with provided data
   * isMenuHeader: `boolean` (optional)
   * disabled: `boolean` (optional)
   * hidden: `boolean` (optional)
+  * action: `function`(optional)
   * params: `table` (optional)
     * event: `string`
     * args: `any` (optional)
@@ -66,7 +67,15 @@ exports['qb-menu']:openMenu({
         isMenuHeader = false,
         disabled = true,
         hidden = false
+    },
+    {
+        header = "Third Item", 
+        txt = "Another description",
+        action = function()
+           print('You selected the Third Item')
+        end
     }
+       
 }, true, false)
 ```
 

@@ -58,9 +58,7 @@ end, false)
 You can use SetItemData to achieve this
 {% endhint %}
 
-Items support additional information that can be added to them via an `info` attribute. This information will display on the item when the player hovers over it in a key,value pair format
-
-#### Example:
+Items support additional information that can be added to them via an `info` attribute. This information will display on the item when the player hovers over it in a key,value pair format. You can also add a special `display` keyword and make it false to hide any data inside the info table from being shown!
 
 ```lua
 RegisterCommand('addItemWithInfo', function(source, args)
@@ -92,11 +90,7 @@ end, true)
 
 ## LoadInventory
 
-This function will retrieve the players inventory from the database via their unique identifier aka `citizenid`
-
-```lua
-exports['qb-inventory']:LoadInventory(source, citizenid)
-```
+This function retrieves the player's inventory from the database using their `citizenid`, decodes it from JSON, and builds a structured table of items using data from `QBCore.Shared.Items`. If an item is found that no longer exists in the shared items table, it is skipped and logged to the console. The returned inventory contains detailed information like item label, weight, image, and usage properties
 
 * source: `number`
 * citizenid: `string`
@@ -113,16 +107,10 @@ end)
 
 ## SaveInventory
 
-This function saves the players current items to the database
-
-```lua
-exports['qb-inventory']:SaveInventory(source, offline)
-```
+Saves the player's current inventory to the database by serializing item data into JSON format. Supports both online and offline player data
 
 * source: `number`
 * offline: `boolean`
-
-#### Example:
 
 ```lua
 RegisterCommand('saveInv', function(source)
@@ -132,14 +120,10 @@ end)
 
 ## ClearInventory
 
-```lua
-exports['qb-inventory']:ClearInventory(source, filterItems)
-```
+Clears a player's inventory, optionally preserving specific items by name. Updates player data, logs the action, and removes the currently equipped weapon if applicable
 
 * source: `number`
 * filterItems: `string | table`
-
-Example:
 
 ```lua
 RegisterCommand('clearInventoryExcludeItem', function(source, args)
@@ -156,16 +140,26 @@ RegisterCommand('clearInventoryExcludeItems', function(source)
 end, true)
 ```
 
-## CloseInventory
+## ClearStash
+
+Empties all items from the specified stash inventory and updates the database to reflect the cleared state
+
+* identifier: `string`
 
 ```lua
-exports['qb-inventory']:CloseInventory(source, identifier)
+RegisterCommand("clearstash", function(source, args, raw)
+    local stashId = args[1]
+    exports['qb-inventory']:ClearStash(stashId)
+    print("Stash '" .. stashId .. "' has been cleared.")
+end, false)
 ```
+
+## CloseInventory
+
+Closes the specified inventory and marks the player as no longer busy, then notifies the client to close the inventory UI
 
 * source: `number`
 * identifier: `string`
-
-Example:
 
 ```lua
 RegisterCommand('closeInventory', function(source)
@@ -181,15 +175,11 @@ end, true)
 
 ## OpenInventory
 
-```lua
-exports['qb-inventory']:OpenInventory(source, identifier, data)
-```
+Opens a specified inventory or the player's own if no identifier is given. Prevents access if the inventory is already in use, initializes it if needed, and sends formatted inventory data to the client for display
 
 * source: `number`
 * identifier: `string | optional`
 * data: `table | optional`
-
-#### Example:
 
 ```lua
 RegisterCommand('openinv', function(source)
@@ -210,14 +200,10 @@ end, true)
 
 ## OpenInventoryById
 
-```lua
-exports['qb-inventory']:OpenInventoryById(source, playerId)
-```
+Opens another player's inventory for viewing or interaction, formatting their data for display and marking their state as busy to prevent conflicts
 
 * source: `number`
 * playerId: `number`
-
-#### Example:
 
 ```lua
 RegisterCommand('openplayerinv', function(source, args)
@@ -230,13 +216,53 @@ end, true)
 `OpenInventoryById` will close the target players inventory (if open) and lock it via state. It will then unlock when the opening player closes it
 {% endhint %}
 
-## CreateShop
+## CreateInventory
+
+Creates and registers a new inventory using the provided identifier and initialization data if it doesn't already exist
+
+* identifier: `string`
+* data: `table`
 
 ```lua
-exports['qb-inventory']:CreateShop(shopData)
+RegisterCommand("createinv", function(source, args)
+    local id = args[1]
+    if not id then
+        print("Usage: /createinv [identifier]")
+        return
+    end
+    exports['qb-inventory']:CreateInventory(id, {
+        label = "Custom Inventory",
+        maxweight = 100000,
+        slots = 30
+    })
+    print("Inventory '" .. id .. "' created.")
+end, false)
 ```
 
-* shopData: `table`
+## RemoveInventory
+
+Deletes the inventory associated with the specified identifier from the in-memory registry
+
+* identifier: `string`
+
+```lua
+RegisterCommand("removeinv", function(source, args)
+    local id = args[1]
+    exports['qb-inventory']:RemoveInventory(id)
+    print("Inventory '" .. id .. "' removed.")
+end, false)
+```
+
+## CreateShop
+
+Registers one or multiple shops by storing their data, including name, label, coordinates, item slots, and available items, into the global shop registry
+
+* shopData: `table`&#x20;
+  * name: `string`
+  * label: `string`
+  * coords: `vector3`
+  * slots: `number`
+  * items: `table`
 
 ```lua
 local items = {
@@ -262,9 +288,7 @@ Coords being passed to `createShop` will be checked against the player's current
 
 ## OpenShop
 
-```lua
-exports['qb-inventory']:OpenShop(source, name)
-```
+Opens a shop inventory for the player if they're within range, formatting the shop data for client display and sending it alongside the player's current inventory
 
 * source: `number`
 * name: `string`
@@ -277,16 +301,12 @@ end)
 
 ## CanAddItem
 
-```lua
-exports['qb-inventory']:CanAddItem(source, item, amount)
-```
+Determines whether a specified item and amount can be added to a player or inventory, checking both weight limits and slot availability. Returns false with a reason if constraints are exceeded
 
 * source: `number`
 * item: `string`
 * amount: `number`
 * <mark style="color:yellow;">returns</mark>: `boolean`
-
-Example:
 
 ```lua
 RegisterCommand('canAddItem', function(source, args)
@@ -304,9 +324,7 @@ end, true)
 
 ## AddItem
 
-```lua
-exports['qb-inventory']:AddItem(identifier, item, amount, slot, info, reason)
-```
+Adds an item to a player or specific inventory, accounting for weight limits and available slots. Logs the action and returns whether it succeeded
 
 * identifier: `number`
 * item: `string`
@@ -315,8 +333,6 @@ exports['qb-inventory']:AddItem(identifier, item, amount, slot, info, reason)
 * info: `table | boolean`
 * reason: `string`
 * <mark style="color:yellow;">returns</mark>: `boolean`
-
-#### Example:
 
 ```lua
 RegisterCommand('addItem', function(source, args)
@@ -328,9 +344,7 @@ end, true)
 
 ## RemoveItem
 
-```lua
-exports['qb-inventory']:RemoveItem(identifier, item, amount, slot, reason)
-```
+Removes a specified amount of an item from a player or inventory, optionally from a specific slot. Updates data and logs the removal
 
 * identifier: `number`
 * item: `string`
@@ -349,14 +363,10 @@ end, true)
 
 ## SetInventory
 
-```lua
-exports['qb-inventory']:SetInventory(source, items)
-```
+Sets the item list for a specified player, drop, or custom inventory, updating in-memory data and logging the change for auditing purposes
 
 * source: `number`
 * items: `table`
-
-Example:
 
 ```lua
 RegisterCommand('setInventory', function(source)
@@ -382,21 +392,17 @@ end, true)
 
 ## SetItemData
 
+Sets a specific key-value pair in a player's item data and updates the player's inventory with the modified item
+
 {% hint style="warning" %}
 This function uses GetItemByName to find the itemName being passed
 {% endhint %}
-
-```lua
-exports['qb-inventory']:SetItemData(source, itemName, key, val)
-```
 
 * source: `number`
 * itemName: `string`
 * key: `string`
 * val: `string | table`
 * <mark style="color:yellow;">returns</mark>: `boolean`
-
-Example:
 
 ```lua
 RegisterCommand('setItemData', function(source, args)
@@ -432,14 +438,10 @@ end, true)
 
 ## UseItem
 
-```lua
-exports['qb-inventory']:UseItem(itemName, ...)
-```
+Triggers the use function of a specified usable item if it exists, passing any additional arguments to the item's handler
 
 * itemName: `string`
 * . . . : `function`
-
-Example:
 
 ```lua
 RegisterCommand('useItem', function(source, args)
@@ -453,20 +455,16 @@ end, true)
 
 ## HasItem
 
+Checks whether a player possesses a specific item or set of items in their inventory, optionally verifying that the required amount is met for each
+
 {% hint style="success" %}
 This export is also available to use on the client
 {% endhint %}
-
-```lua
-exports['qb-inventory']:HasItem(source, items, amount)
-```
 
 * source: `number`
 * items: `string | table`
 * amount: `number`
 * <mark style="color:yellow;">returns</mark>: `boolean`
-
-Example:
 
 ```lua
 RegisterCommand('hasSingleItem', function(source)
@@ -501,17 +499,13 @@ RegisterCommand('hasMultipleItemsWithAmounts', function(source)
     end
 end, true)
 ```
-## GetFreeWeight
-Returns the available space in weight of a specified player source's inventory.
 
-```lua
-exports['qb-inventory']:GetFreeWeight(source)
-```
+## GetFreeWeight
+
+Calculates and returns the remaining weight capacity in a player's inventory. Returns 0 if the player is not found or the source is invalid
 
 * source: `number`
 * <mark style="color:yellow;">returns</mark>: `number`
-
-Example:
 
 ```lua
 RegisterCommand('getFreeWeight', function(source)
@@ -519,23 +513,35 @@ RegisterCommand('getFreeWeight', function(source)
     print('Free Weight: ' .. freeWeight)
 end, true)
 ```
-## GetSlots
-Returns the occupied and empty slots of a specified identifier's inventory. (Player source or id of inventory / drop)
+
+## GetTotalWeight
+
+Calculates and returns the total weight of all items in the inventory, accounting for item quantities
+
+* items: `table`
+* <mark style="color:yellow;">returns</mark>: `number`
 
 ```lua
-exports['qb-inventory']:GetSlots(identifier)
+RegisterCommand("checkweight", function(source, args, raw)
+    local Player = QBCore.Functions.GetPlayer(source)
+    if not Player then return end
+    local inventory = Player.PlayerData.items
+    local totalWeight = exports['qb-inventory']:GetTotalWeight(inventory)
+    print(("Total Inventory Weight: ", totalWeight)
+end, false)
 ```
 
-* identifier: `number | string`
-* <mark style="color:yellow;">returns</mark>: slotsUsed: `number`, slotsFree: `number`
+## GetSlots
 
-Example:
+Returns the number of used and available slots in a player's inventory, a custom inventory, or a drop, based on the provided identifier
+
+* identifier: `number | string`
+* <mark style="color:yellow;">returns</mark>: `number`, `number`
 
 ```lua
 RegisterCommand('getSlots', function(source, args)
     local invId = args[1]
     if not invId then return end
-
     local slotsUsed, slotsFree = exports['qb-inventory']:GetSlots(invId)
     print('Slots Used: ' .. slotsUsed, 'Slots Free: ' .. slotsFree)
 end, true)
@@ -543,15 +549,11 @@ end, true)
 
 ## GetSlotsByItem
 
-```lua
-exports['qb-inventory']:GetSlotsByItem(items, itemName)
-```
+Returns a list of all inventory slots containing the specified item, ignoring case sensitivity
 
 * items: `table`
 * itemName: `string`
 * <mark style="color:yellow;">returns</mark>: `table`
-
-Example:
 
 ```lua
 RegisterCommand('getSlots', function(source, args)
@@ -568,15 +570,11 @@ end, true)
 
 ## GetFirstSlotByItem
 
-```lua
-exports['qb-inventory']:GetFirstSlotByItem(items, itemName)
-```
+Finds and returns all inventory slots that contain a specified item by name, ignoring case sensitivity
 
 * items: `table`
 * itemName: `string`
 * <mark style="color:yellow;">returns</mark>: `number`
-
-Example:
 
 ```lua
 RegisterCommand('getFirstSlot', function(source, args)
@@ -595,15 +593,11 @@ end, true)
 
 ## GetItemBySlot
 
-```lua
-exports['qb-inventory']:GetItemBySlot(source, slot)
-```
+Retrieves the item from a player's inventory at the specified slot, or returns nil if the slot is empty or the player is not found
 
 * source: `number`
 * slot: `number`
 * <mark style="color:yellow;">returns</mark>: `table`
-
-Example:
 
 ```lua
 RegisterCommand('getItem', function(source, args)
@@ -620,15 +614,11 @@ end, true)
 
 ## GetItemByName
 
-```lua
-exports['qb-inventory']:GetItemByName(source, item)
-```
+Retrieves the first instance of a specified item from a player's inventory by name, returning its data if found
 
 * source: `number`
 * item: `string`
 * <mark style="color:yellow;">returns</mark>: `table`
-
-Example:
 
 ```lua
 RegisterCommand('getItemByName', function(source, args)
@@ -645,15 +635,11 @@ end, true)
 
 ## GetItemsByName
 
-```lua
-exports['qb-inventory']:GetItemsByName(source, item)
-```
+Retrieves all instances of a specified item from a player's inventory, returning a list of matching items by name
 
 * source: `number`
 * item: `string`
 * <mark style="color:yellow;">returns</mark>: `table`
-
-Example:
 
 ```lua
 RegisterCommand('getItemsByName', function(source, args)
@@ -673,15 +659,11 @@ end, true)
 
 ## GetItemCount
 
-```lua
-exports['qb-inventory']:GetItemCount(source, items)
-```
+Calculates the total quantity of one or more specified items in a player's inventory, supporting both single item names and tables of item names
 
 * source: `number`
 * items: `string | table`
 * <mark style="color:yellow;">returns</mark>: `number`
-
-Example:
 
 ```lua
 RegisterCommand('getItemCount', function(source, args)
@@ -704,4 +686,23 @@ RegisterCommand('getItemCounts', function(source)
         print('No items found with the names: '..table.concat(itemNames, ", "))
     end
 end, true)
+```
+
+## GetInventory
+
+Retrieves the inventory object associated with the given identifier, or `nil` if not found
+
+* identifier: `string`
+* <mark style="color:yellow;">returns</mark>: `table` | `nil`
+
+```lua
+RegisterCommand("getinv", function(source, args)
+    local id = args[1]
+    local inv = exports['qb-inventory']:GetInventory(id)
+    if inv then
+        print("Inventory '" .. id .. "' has " .. tostring(#inv.items) .. " items")
+    else
+        print("Inventory not found")
+    end
+end, false)
 ```

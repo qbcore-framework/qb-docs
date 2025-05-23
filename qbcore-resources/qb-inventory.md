@@ -392,16 +392,13 @@ end, true)
 
 ## SetItemData
 
-Sets a specific key-value pair in a player's item data and updates the player's inventory with the modified item
-
-{% hint style="warning" %}
-This function uses GetItemByName to find the itemName being passed
-{% endhint %}
+Sets a specific key-value pair in a player's item data and updates the player's inventory with the modified item. If a slot number is provided, it directly targets the item in that slot. Otherwise, it uses `GetItemByName` to find the first matching item by name
 
 * source: `number`
 * itemName: `string`
 * key: `string`
-* val: `string | table`
+* val: `string | table`&#x20;
+* slot: `number` (optional)
 * <mark style="color:yellow;">returns</mark>: `boolean`
 
 ```lua

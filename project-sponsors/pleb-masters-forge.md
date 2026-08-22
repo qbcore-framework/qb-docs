@@ -1,19 +1,29 @@
 ---
-description: Enter the forge!
+description: Search GTA V game data and find what you need for QBCore resources.
 ---
 
-# 🗃 Pleb Masters: Forge
+# 🔎 Pleb Masters: Forge
 
+<figure><img src="../.gitbook/assets/pleb-masters-forge-logo.png" alt="Pleb Masters: Forge logo" width="280"></figure>
 
+Building or configuring a QBCore resource often starts with a simple question: which model, hash, animation, or map data do I need? Pleb Masters: Forge puts years of GTA V research in one searchable workbench, so you can spend less time digging through game files and more time working on your server.
 
-![](../.gitbook/assets/pleb.png)
+## What you can find
 
-## Who are they?
+* Objects and props with visual previews
+* Vehicles, peds, weapons, clothing, and tattoos
+* Maps, MLOs, animations, and hashes
 
-Pleb Masters offers the biggest collection of GTA 5 modding & scripting tools. An essential website that will help you with searching stuff needed for resource configurations or FiveM scripting.
+## Built for everyday QBCore work
 
-It features various data viewers with images and models for GTA V data like objects, clothes, vehicles, weapons, tattoos, peds, mlo's and more!
+Server owners can look up assets while configuring jobs, housing, interiors, vehicles, or clothing. Developers can confirm model names and hashes while writing or debugging resources. Map and content creators can inspect game data before committing it to a release.
 
-## Products
+<figure><img src="../.gitbook/assets/pleb-masters-forge-product.webp" alt="Pleb Masters: Forge searchable game data workbench"></figure>
 
-{% embed url="https://forge.plebmasters.de" %}
+## Search Forge
+
+Forge is free to use and opens directly in your browser.
+
+<a href="https://forge.plebmasters.de/" class="button primary">Search GTA V data</a>
+
+{% embed url="https://forge.plebmasters.de/" %}

@@ -4,7 +4,10 @@
 
 * [✍️ JetBrains](README.md)
 * [📚 GitBook](project-sponsors/gitbook.md)
-* [🗃️ Pleb Masters: Forge](project-sponsors/pleb-masters-forge.md)
+* [🔎 Pleb Masters: Forge](project-sponsors/pleb-masters-forge.md)
+* [✨ Forge Mods](project-sponsors/forge-mods.md)
+* [👕 Durty Cloth Tool](project-sponsors/durty-cloth-tool.md)
+* [🧩 Smart Merge V](project-sponsors/smart-merge-v.md)
 * [🎥 KakarotDevs](project-sponsors/kakarotdevs.md)
 
 ## Guides

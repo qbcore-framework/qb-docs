@@ -88,7 +88,319 @@ RegisterCommand('editItemWithInfo', function(source)
 end, true)
 ```
 
-## LoadInventory
+## Hooks & Listeners
+
+Hooks run before an inventory action to allow or block it; listeners run after to react to it, with no ability to change the outcome.
+
+Supported event types:
+
+```lua
+'ItemMoved' | 'ItemDropped' | 'ItemUsed' | 'ItemBought'
+'ItemAdded' | 'ItemRemoved' | 'InventoryOpened' | 'ShopOpened'
+```
+
+### Callback payloads
+
+Each callback receives an event-specific type and payload. Snapshots contain the inventory state supplied by that event.
+
+#### Shared shapes
+
+These shapes recur across callback payloads.
+
+```lua
+Item = {
+    name = string,
+    label = string,
+    description = string,
+    amount = number,
+    info = table,
+    weight = number,
+    type = string,
+    unique = boolean,
+    useable = boolean,
+    slot = number,
+}
+
+InventorySnapshot = {
+    slots = number,
+    maxweight = number,
+    items = { [slotNumber] = Item },
+}
+
+Shop = {
+    name = string,
+    label = string,
+    coords = vector3,
+    slots = number,
+    items = { [slotNumber] = Item },
+    type = string,
+}
+```
+
+***
+
+#### ItemUsed
+
+Provides the source inventory and item being used.
+
+```lua
+-- Callback signature
+callback(itemType, payload)
+
+payload = {
+    source = number,
+    sourceInventory = InventorySnapshot,
+    item = Item,
+}
+```
+
+***
+
+#### ItemDropped
+
+Provides the source inventory, drop coordinates, and dropped item.
+
+```lua
+-- Callback signature
+callback(itemType, payload)
+
+payload = {
+    source = number,
+    sourceInventory = InventorySnapshot,
+    coords = vector3,
+    item = Item,
+    amount = number,
+    dropId = string, -- listener only
+    netId = number, -- listener only
+}
+```
+
+{% hint style="info" %}
+`item.amount` always equals `amount`.
+
+`dropId` and `netId` are available to listeners only.
+{% endhint %}
+
+***
+
+#### ItemBought
+
+Provides the buyer, shop listing, purchase amount, and total price.
+
+```lua
+-- Callback signature
+callback(shopType, payload)
+
+payload = {
+    shopType = string,
+    shop = Shop,
+    toId = number,
+    item = Item,
+    amount = number,
+    totalPrice = number,
+}
+```
+
+* `toId` is the buyer's player ID.
+* `item` is the shop listing.
+
+***
+
+#### ItemAdded
+
+Provides the destination inventory and context for the added item.
+
+```lua
+-- Callback signature
+callback(itemType, payload)
+
+payload = {
+    toId = number,
+    toType = string,
+    toInventory = InventorySnapshot,
+    toSlot = number,
+    item = Item,
+    amount = number,
+    reason = string,
+    resource = string,
+}
+```
+
+{% hint style="warning" %}
+Both values describe this add operation. They are not the slot's resulting total.
+
+A **listener** can read `toInventory.items[toSlot]` for the resulting slot value; a **hook** reads the same field pre-mutation, so that slot won't reflect the add yet.
+
+Return a table from this hook, instead of `false`, to replace `item.info`. ItemAdded is the only hook that mutates data rather than cancels an event.
+{% endhint %}
+
+{% hint style="info" %}
+`item.amount` always equals `amount`.
+
+This event does not fire for moves, stacks, splits, or swaps. Only for transfers crossing into another player's inventory or out of the inventory system entirely, like gives and drops.
+{% endhint %}
+
+***
+
+#### ItemRemoved
+
+Provides the source inventory and context for the removed item.
+
+```lua
+-- Callback signature
+callback(itemType, payload)
+
+payload = {
+    fromId = number,
+    fromType = string,
+    fromInventory = InventorySnapshot,
+    fromSlot = number,
+    item = Item,
+    amount = number,
+    reason = string,
+    resource = string,
+}
+```
+
+{% hint style="info" %}
+`item.amount` always equals `amount`.
+
+Both values describe this removal. They are not the slot's resulting total.
+
+This event does not fire for moves, stacks, splits, or swaps. Only for transfers crossing into another player's inventory or out of the inventory system entirely, like gives and drops.
+{% endhint %}
+
+***
+
+#### ItemMoved
+
+Provides source and destination inventory snapshots for the move.
+
+```lua
+-- Callback signature
+callback(moveKind, payload)
+
+moveKind = 'given' | 'stacked' | 'split' | 'swapped' | 'moved'
+
+payload = {
+    fromId = number,
+    fromType = string,
+    fromInventory = InventorySnapshot,
+    toId = number,
+    toType = string,
+    toInventory = InventorySnapshot,
+    fromSlot = number,
+    toSlot = number,
+    amount = number,
+}
+```
+
+{% hint style="info" %}
+**Hooks** receive pre-mutation inventory snapshots.
+
+**Listeners** receive post-mutation inventory snapshots.
+{% endhint %}
+
+***
+
+#### InventoryOpened
+
+Provides the opening player and the inventory being opened.
+
+```lua
+-- Callback signature
+callback(inventoryType, payload)
+
+inventoryType = 'player' | 'trunk' | 'glovebox' | 'drop' | 'inventory'
+
+payload = {
+    source = number,
+    sourceInventory = InventorySnapshot,
+    inventoryId = string | number,
+    inventory = InventorySnapshot,
+}
+```
+
+* `inventory` is the inventory being opened.
+
+***
+
+#### ShopOpened
+
+Provides the opening player, their inventory, and the shop.
+
+```lua
+-- Callback signature
+callback(shopType, payload)
+
+payload = {
+    source = number,
+    sourceInventory = InventorySnapshot,
+    shop = Shop,
+}
+```
+
+***
+
+### AddHook
+
+Registers a hook before an inventory event. Return `false` from the callback to cancel it.
+
+```lua
+AddHook(hookType, callback)
+```
+
+* hookType: `ItemMoved | ItemDropped | ItemUsed | ItemBought | ItemAdded | ItemRemoved | InventoryOpened | ShopOpened`
+* callback: `function(...)` — The callback signature depends on `hookType`. See [Callback payloads](qb-inventory.md#callback-payloads).
+* <mark style="color:yellow;">returns</mark>: `number | nil` — The hook index. Use it to remove the hook. Returns `nil` when registration fails.
+
+***
+
+### RemoveHook
+
+Removes a previously registered hook.
+
+```lua
+RemoveHook(hookType, hookIdx)
+```
+
+* hookType: `ItemMoved | ItemDropped | ItemUsed | ItemBought | ItemAdded | ItemRemoved | InventoryOpened | ShopOpened`
+* hookIdx: `number`
+
+***
+
+### AddListener
+
+Registers a listener after an inventory event. Callback return values are ignored.
+
+```lua
+AddListener(listenerType, callback)
+```
+
+* listenerType: `ItemMoved | ItemDropped | ItemUsed | ItemBought | ItemAdded | ItemRemoved | InventoryOpened | ShopOpened`
+* callback: `function(...)` — The callback signature depends on `listenerType`. See [Callback payloads](qb-inventory.md#callback-payloads).
+* <mark style="color:yellow;">returns</mark>: `number | nil` — The listener index. Use it to remove the listener. Returns `nil` when registration fails.
+
+***
+
+### RemoveListener
+
+Removes a previously registered listener.
+
+```lua
+RemoveListener(listenerType, listenerIdx)
+```
+
+* listenerType: `ItemMoved | ItemDropped | ItemUsed | ItemBought | ItemAdded | ItemRemoved | InventoryOpened | ShopOpened`
+* listenerIdx: `number`
+
+***
+
+## Exports
+
+These exports perform inventory actions or retrieve inventory data.
+
+### LoadInventory
 
 This function retrieves the player's inventory from the database using their `citizenid`, decodes it from JSON, and builds a structured table of items using data from `QBCore.Shared.Items`. If an item is found that no longer exists in the shared items table, it is skipped and logged to the console. The returned inventory contains detailed information like item label, weight, image, and usage properties
 
@@ -105,7 +417,7 @@ RegisterCommand('getInv', function(source)
 end)
 ```
 
-## SaveInventory
+### SaveInventory
 
 Saves the player's current inventory to the database by serializing item data into JSON format. Supports both online and offline player data
 
@@ -118,7 +430,7 @@ RegisterCommand('saveInv', function(source)
 end)
 ```
 
-## ClearInventory
+### ClearInventory
 
 Clears a player's inventory, optionally preserving specific items by name. Updates player data, logs the action, and removes the currently equipped weapon if applicable
 
@@ -140,7 +452,7 @@ RegisterCommand('clearInventoryExcludeItems', function(source)
 end, true)
 ```
 
-## ClearStash
+### ClearStash
 
 Empties all items from the specified stash inventory and updates the database to reflect the cleared state
 
@@ -154,7 +466,7 @@ RegisterCommand("clearstash", function(source, args, raw)
 end, false)
 ```
 
-## CloseInventory
+### CloseInventory
 
 Closes the specified inventory and marks the player as no longer busy, then notifies the client to close the inventory UI
 
@@ -173,7 +485,7 @@ RegisterCommand('closeInventoryByName', function(source, identifier)
 end, true)
 ```
 
-## OpenInventory
+### OpenInventory
 
 Opens a specified inventory or the player's own if no identifier is given. Prevents access if the inventory is already in use, initializes it if needed, and sends formatted inventory data to the client for display
 
@@ -198,7 +510,7 @@ RegisterCommand('openinvbynamewithdata', function(source, args)
 end, true)
 ```
 
-## OpenInventoryById
+### OpenInventoryById
 
 Opens another player's inventory for viewing or interaction, formatting their data for display and marking their state as busy to prevent conflicts
 
@@ -216,7 +528,7 @@ end, true)
 `OpenInventoryById` will close the target players inventory (if open) and lock it via state. It will then unlock when the opening player closes it
 {% endhint %}
 
-## CreateInventory
+### CreateInventory
 
 Creates and registers a new inventory using the provided identifier and initialization data if it doesn't already exist
 
@@ -239,7 +551,7 @@ RegisterCommand("createinv", function(source, args)
 end, false)
 ```
 
-## RemoveInventory
+### RemoveInventory
 
 Deletes the inventory associated with the specified identifier from the in-memory registry
 
@@ -253,11 +565,11 @@ RegisterCommand("removeinv", function(source, args)
 end, false)
 ```
 
-## CreateShop
+### CreateShop
 
 Registers one or multiple shops by storing their data, including name, label, coordinates, item slots, and available items, into the global shop registry
 
-* shopData: `table`&#x20;
+* shopData: `table`
   * name: `string`
   * label: `string`
   * coords: `vector3`
@@ -286,7 +598,7 @@ end, true)
 Coords being passed to `createShop` will be checked against the player's current coords when `OpenShop`is called if coords were provided during `createShop`
 {% endhint %}
 
-## OpenShop
+### OpenShop
 
 Opens a shop inventory for the player if they're within range, formatting the shop data for client display and sending it alongside the player's current inventory
 
@@ -299,7 +611,7 @@ RegisterCommand('openShop', function(source)
 end)
 ```
 
-## CanAddItem
+### CanAddItem
 
 Determines whether a specified item and amount can be added to a player or inventory, checking both weight limits and slot availability. Returns false with a reason if constraints are exceeded
 
@@ -322,7 +634,7 @@ RegisterCommand('canAddItem', function(source, args)
 end, true)
 ```
 
-## AddItem
+### AddItem
 
 Adds an item to a player or specific inventory, accounting for weight limits and available slots. Logs the action and returns whether it succeeded
 
@@ -342,7 +654,7 @@ RegisterCommand('addItem', function(source, args)
 end, true)
 ```
 
-## RemoveItem
+### RemoveItem
 
 Removes a specified amount of an item from a player or inventory, optionally from a specific slot. Updates data and logs the removal
 
@@ -361,7 +673,7 @@ RegisterCommand('removeItem', function(source, args)
 end, true)
 ```
 
-## SetInventory
+### SetInventory
 
 Sets the item list for a specified player, drop, or custom inventory, updating in-memory data and logging the change for auditing purposes
 
@@ -390,14 +702,14 @@ RegisterCommand('setInventory', function(source)
 end, true)
 ```
 
-## SetItemData
+### SetItemData
 
 Sets a specific key-value pair in a player's item data and updates the player's inventory with the modified item. If a slot number is provided, it directly targets the item in that slot. Otherwise, it uses `GetItemByName` to find the first matching item by name
 
 * source: `number`
 * itemName: `string`
 * key: `string`
-* val: `string | table`&#x20;
+* val: `string | table`
 * slot: `number` (optional)
 * <mark style="color:yellow;">returns</mark>: `boolean`
 
@@ -433,7 +745,7 @@ RegisterCommand('setItemData', function(source)
 end, true)
 ```
 
-## UseItem
+### UseItem
 
 Triggers the use function of a specified usable item if it exists, passing any additional arguments to the item's handler
 
@@ -450,7 +762,7 @@ RegisterCommand('useItem', function(source, args)
 end, true)
 ```
 
-## HasItem
+### HasItem
 
 Checks whether a player possesses a specific item or set of items in their inventory, optionally verifying that the required amount is met for each
 
@@ -497,7 +809,7 @@ RegisterCommand('hasMultipleItemsWithAmounts', function(source)
 end, true)
 ```
 
-## GetFreeWeight
+### GetFreeWeight
 
 Calculates and returns the remaining weight capacity in a player's inventory. Returns 0 if the player is not found or the source is invalid
 
@@ -511,7 +823,7 @@ RegisterCommand('getFreeWeight', function(source)
 end, true)
 ```
 
-## GetTotalWeight
+### GetTotalWeight
 
 Calculates and returns the total weight of all items in the inventory, accounting for item quantities
 
@@ -528,7 +840,7 @@ RegisterCommand("checkweight", function(source, args, raw)
 end, false)
 ```
 
-## GetSlots
+### GetSlots
 
 Returns the number of used and available slots in a player's inventory, a custom inventory, or a drop, based on the provided identifier
 
@@ -544,7 +856,7 @@ RegisterCommand('getSlots', function(source, args)
 end, true)
 ```
 
-## GetSlotsByItem
+### GetSlotsByItem
 
 Returns a list of all inventory slots containing the specified item, ignoring case sensitivity
 
@@ -565,7 +877,7 @@ RegisterCommand('getSlots', function(source, args)
 end, true)
 ```
 
-## GetFirstSlotByItem
+### GetFirstSlotByItem
 
 Finds and returns all inventory slots that contain a specified item by name, ignoring case sensitivity
 
@@ -588,7 +900,7 @@ RegisterCommand('getFirstSlot', function(source, args)
 end, true)
 ```
 
-## GetItemBySlot
+### GetItemBySlot
 
 Retrieves the item from a player's inventory at the specified slot, or returns nil if the slot is empty or the player is not found
 
@@ -609,7 +921,7 @@ RegisterCommand('getItem', function(source, args)
 end, true)
 ```
 
-## GetItemByName
+### GetItemByName
 
 Retrieves the first instance of a specified item from a player's inventory by name, returning its data if found
 
@@ -630,7 +942,7 @@ RegisterCommand('getItemByName', function(source, args)
 end, true)
 ```
 
-## GetItemsByName
+### GetItemsByName
 
 Retrieves all instances of a specified item from a player's inventory, returning a list of matching items by name
 
@@ -654,7 +966,7 @@ RegisterCommand('getItemsByName', function(source, args)
 end, true)
 ```
 
-## GetItemCount
+### GetItemCount
 
 Calculates the total quantity of one or more specified items in a player's inventory, supporting both single item names and tables of item names
 
@@ -685,7 +997,7 @@ RegisterCommand('getItemCounts', function(source)
 end, true)
 ```
 
-## GetInventory
+### GetInventory
 
 Retrieves the inventory object associated with the given identifier, or `nil` if not found
 

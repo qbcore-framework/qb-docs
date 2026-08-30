@@ -116,6 +116,59 @@ QBCore.Functions.TriggerCallback('callbackName', function(result)
 end, 'my_parameter_name')
 ```
 
+### QBCore.Functions.CreateClientCallback
+
+* Registers a client-side callback that can be triggered from the server using `QBCore.Functions.TriggerClientCallback`. This is the reverse of the standard callback system - it allows the server to request data from a specific client.
+
+```lua
+function QBCore.Functions.CreateClientCallback(name, cb)
+    QBCore.ClientCallbacks[name] = cb
+end
+
+-- Example
+
+QBCore.Functions.CreateClientCallback('myresource:getClientData', function(cb, arg1, arg2)
+    -- cb is the response function you MUST call to send data back to the server
+    -- arg1, arg2, etc. are any additional arguments passed from the server
+
+    local playerCoords = GetEntityCoords(PlayerPedId())
+    local isInVehicle = IsPedInAnyVehicle(PlayerPedId(), false)
+
+    -- Send the data back to the server
+    cb(playerCoords, isInVehicle)
+end)
+```
+
+**Full Example (Client + Server):**
+
+```lua
+-- CLIENT SIDE
+QBCore.Functions.CreateClientCallback('myresource:getPlayerInfo', function(cb, requestType)
+    if requestType == 'location' then
+        local coords = GetEntityCoords(PlayerPedId())
+        cb(coords)
+    elseif requestType == 'vehicle' then
+        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+        local plate = vehicle ~= 0 and GetVehicleNumberPlateText(vehicle) or nil
+        cb(plate)
+    end
+end)
+
+-- SERVER SIDE
+CreateThread(function()
+    Wait(5000)
+    local coords = QBCore.Functions.TriggerClientCallback('myresource:getPlayerInfo', source, 'location')
+    print('Player is at:', coords)
+end)
+
+-- OR with callback style
+QBCore.Functions.TriggerClientCallback('myresource:getPlayerInfo', source, function(plate)
+    if plate then
+        print('Player vehicle plate:', plate)
+    end
+end, 'vehicle')
+```
+
 ### QBCore.Functions.Progressbar
 
 * Wrapper for progressbar export

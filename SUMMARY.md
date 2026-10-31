@@ -1,5 +1,9 @@
 # Table of contents
 
+## Mantle
+
+* [About Mantle and QBCore](mantle.md)
+
 ## Project Sponsors
 
 * [✍️ JetBrains](README.md)

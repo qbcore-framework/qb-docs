@@ -2,11 +2,11 @@
 
 ## Mantle
 
-* [About Mantle and QBCore](mantle.md)
+* [About Mantle and QBCore](README.md)
 
 ## Project Sponsors
 
-* [✍️ JetBrains](README.md)
+* [✍️ JetBrains](project-sponsors/readme.md)
 * [📚 GitBook](project-sponsors/gitbook.md)
 * [🔎 Pleb Masters: Forge](project-sponsors/pleb-masters-forge.md)
 * [✨ Forge Mods](project-sponsors/forge-mods.md)

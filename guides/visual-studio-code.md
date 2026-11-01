@@ -28,7 +28,7 @@ Make sure you check the "Open with code" boxes!
 
 * [FiveM natives](https://marketplace.visualstudio.com/items?itemName=overextended.cfxlua-vscode)
 
-<figure><img src="../.gitbook/assets/cfxlua (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/cfxlua.png" alt=""><figcaption></figcaption></figure>
 
 * [Material icon theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme) (cosmetic only)
 

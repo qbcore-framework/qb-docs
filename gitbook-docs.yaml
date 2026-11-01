@@ -1,0 +1,12 @@
+$schema: https://api.gitbook.com/gitbook-docs.yaml
+version: 1
+site:
+  title: QBCore Docs
+  structure:
+    - type: space
+      key: space-qbcore-docs
+      title: QBCore Docs
+      path: docs
+      default: true
+      content:
+        directory: ./

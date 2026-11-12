@@ -82,4 +82,6 @@ description: A list of helpful links relevant to developing on FiveM!
 
 **Support/Issues/Debugging/FAQ:** [https://docs.fivem.net/docs/support/](https://docs.fivem.net/docs/support/)****
 
+**Check a resource for backdoors before installing it:** [https://rpscripts.net/tools/fivem-backdoor-scanner/](https://rpscripts.net/tools/fivem-backdoor-scanner/)
+
 **Full native list:** [https://docs.fivem.net/natives/](https://docs.fivem.net/natives/)
